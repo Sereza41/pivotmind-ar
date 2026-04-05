@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PivotMind — Casino</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Helvetica Neue', Helvetica, sans-serif; overflow:hidden; height:100vh; background:#0a0608; }
+
+/* ═══ CASINO SCENE ═══ */
+#casino {
+  position:fixed; inset:0; z-index:0;
+  overflow:hidden;
+}
+
+/* Потолок */
+.ceiling {
+  position:absolute; top:0; left:0; right:0; height:28%;
+  background:linear-gradient(180deg, #050304 0%, #100a0e 100%);
+}
+
+/* Люстра главная */
+.chandelier {
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:120px;
+}
+.chandelier-bar {
+  width:2px; height:40px; background:#2a2015;
+  margin:0 auto;
+}
+.chandelier-body {
+  width:120px; height:18px;
+  background:linear-gradient(180deg, #2a2015, #1a1508);
+  border-radius:4px;
+  box-shadow: 0 0 30px rgba(255,200,80,0.25), 0 0 60px rgba(255,180,50,0.1);
+  display:flex; align-items:center; justify-content:space-around; padding:0 8px;
+}
+.chandelier-gem {
+  width:6px; height:10px;
+  background:rgba(255,220,120,0.6);
+  border-radius:2px;
+}
+.chandelier-glow {
+  position:absolute; top:58px; left:50%; transform:translateX(-50%);
+  width:200px; height:200px;
+  background:radial-gradient(ellipse, rgba(255,200,80,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* Боковые люстры */
+.side-light {
+  position:absolute; top:0; width:60px;
+}
+.side-light.left { left:12%; }
+.side-light.right { right:12%; }
+.side-light-bar { width:1px; height:28px; background:#1a1508; margin:0 auto; }
+.side-light-body {
+  width:60px; height:10px;
+  background:#1a1508;
+  border-radius:3px;
+  box-shadow: 0 0 20px rgba(255,180,60,0.2);
+}
+.side-light-glow {
+  position:absolute; top:38px; left:50%; transform:translateX(-50%);
+  width:120px; height:120px;
+  background:radial-gradient(ellipse, rgba(255,180,60,0.08) 0%, transparent 70%);
+}
+
+/* Пол */
+.floor {
+  position:absolute; bottom:0; left:0; right:0; height:35%;
+  background:linear-gradient(180deg, #140a10 0%, #0d0609 100%);
+}
+/* Узор пола */
+.floor::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 60px);
+}
+
+/* Стены */
+.wall-left {
+  position:absolute; top:0; left:0; width:8%; height:100%;
+  background:linear-gradient(90deg, #060305 0%, #100810 100%);
+}
+.wall-right {
+  position:absolute; top:0; right:0; width:8%; height:100%;
+  background:linear-gradient(270deg, #060305 0%, #100810 100%);
+}
+
+/* ── ПОКЕРНЫЙ СТОЛ ЦЕНТР ── */
+.poker-table-main {
+  position:absolute;
+  bottom:30%; left:50%; transform:translateX(-50%);
+  width:280px; height:120px;
+}
+
+.table-body {
+  position:absolute; bottom:0; left:0; right:0; height:100px;
+  background:linear-gradient(180deg, #1a1008 0%, #0f0905 100%);
+  border-radius:6px 6px 4px 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.table-felt {
+  position:absolute; top:8px; left:8px; right:8px; height:65px;
+  background:linear-gradient(180deg, #0a2a0a 0%, #081f08 100%);
+  border-radius:4px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* Линия разметки на столе */
+.table-felt::before {
+  content:'';
+  position:absolute; top:50%; left:15%; right:15%; height:1px;
+  background:rgba(255,255,255,0.06);
+  transform:translateY(-50%);
+}
+.table-felt::after {
+  content:'';
+  position:absolute; top:20%; bottom:20%; left:50%; width:1px;
+  background:rgba(255,255,255,0.06);
+}
+
+.table-edge {
+  position:absolute; bottom:0; left:0; right:0; height:16px;
+  background:linear-gradient(180deg, #2a1a08, #1a1005);
+  border-radius:0 0 4px 4px;
+}
+
+/* Фишки на столе */
+.chip {
+  position:absolute;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.2);
+}
+
+/* Карты */
+.card {
+  position:absolute;
+  background:#f5f0e8;
+  border-radius:2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* ── ПОКЕРНЫЙ СТОЛ ЛЕВЫЙ ── */
+.poker-table-left {
+  position:absolute;
+  bottom:28%; left:2%;
+  width:180px; height:90px;
+  transform:perspective(400px) rotateY(20deg);
+}
+
+/* ── ПОКЕРНЫЙ СТОЛ ПРАВЫЙ ── */
+.poker-table-right {
+  position:absolute;
+  bottom:28%; right:2%;
+  width:180px; height:90px;
+  transform:perspective(400px) rotateY(-20deg);
+}
+
+.table-body-sm {
+  position:absolute; bottom:0; left:0; right:0; height:80px;
+  background:linear-gradient(180deg, #1a1008 0%, #0f0905 100%);
+  border-radius:5px 5px 3px 3px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.8);
+}
+
+.table-felt-sm {
+  position:absolute; top:6px; left:6px; right:6px; height:52px;
+  background:linear-gradient(180deg, #0a2a0a 0%, #081a08 100%);
+  border-radius:3px;
+}
+
+.table-edge-sm {
+  position:absolute; bottom:0; left:0; right:0; height:12px;
+  background:#1a1005; border-radius:0 0 3px 3px;
+}
+
+/* ── ИГРОВОЙ АППАРАТ ── */
+.slot-machine {
+  position:absolute;
+  bottom:28%;
+}
+
+.slot-machine.left-slot { left:9%; }
+.slot-machine.right-slot { right:9%; }
+
+.slot-body {
+  width:70px; height:110px;
+  background:linear-gradient(180deg, #1a0820 0%, #120515 100%);
+  border-radius:6px 6px 3px 3px;
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+  position:relative;
+}
+
+.slot-screen {
+  position:absolute; top:12px; left:8px; right:8px; height:38px;
+  background:#000d00;
+  border-radius:3px;
+  border:1px solid rgba(0,200,0,0.2);
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:space-around; padding:0 4px;
+}
+
+.slot-reel {
+  font-size:16px; line-height:1;
+  color:rgba(0,255,0,0.7);
+}
+
+.slot-lights {
+  position:absolute; top:4px; left:0; right:0;
+  display:flex; justify-content:space-around; padding:0 6px;
+}
+
+.slot-light {
+  width:5px; height:5px; border-radius:50%;
+}
+.slot-light.y { background:rgba(255,220,0,0.7); box-shadow:0 0 4px rgba(255,220,0,0.4); }
+.slot-light.r { background:rgba(255,50,50,0.7); box-shadow:0 0 4px rgba(255,50,50,0.4); }
+.slot-light.g { background:rgba(0,255,100,0.7); box-shadow:0 0 4px rgba(0,255,100,0.4); }
+
+.slot-buttons {
+  position:absolute; bottom:18px; left:8px; right:8px;
+  display:flex; gap:4px; justify-content:center;
+}
+
+.slot-btn {
+  width:16px; height:10px; border-radius:2px;
+}
+.slot-btn.red { background:#8b1a1a; }
+.slot-btn.yellow { background:#8b7a10; }
+
+.slot-lever {
+  position:absolute; right:-10px; top:20px;
+  width:8px; height:40px;
+  background:linear-gradient(180deg, #888, #555);
+  border-radius:4px;
+}
+.slot-lever::after {
+  content:''; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+  width:12px; height:12px; border-radius:50%;
+  background:radial-gradient(circle, #cc2020, #8b1010);
+}
+
+.slot-base {
+  width:70px; height:12px;
+  background:linear-gradient(180deg, #0d0412, #080208);
+  border-radius:0 0 4px 4px;
+  border:1px solid rgba(255,255,255,0.04);
+  border-top:none;
+}
+
+/* Атмосфера — тёмные виньетки */
+.vignette {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+}
+
+/* Дымка */
+.haze {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(60,20,50,0.15) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(10,5,8,0.4) 100%);
+}
+
+/* ═══ UI OVERLAY ═══ */
+#overlay {
+  position:fixed; inset:0; z-index:10; pointer-events:none;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+
+/* TOP */
+#top {
+  pointer-events:all;
+  padding:20px 22px 0;
+  display:flex; justify-content:space-between; align-items:flex-start;
+}
+
+.scene-tag {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 13px;
+  background:rgba(0,0,0,0.75);
+  border:1px solid rgba(255,255,255,0.1);
+  font-size:10px; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; color:rgba(255,255,255,0.45);
+}
+.scene-tag::before {
+  content:''; width:5px; height:5px; border-radius:50%; background:#c9a84c;
+}
+
+.progress-line {
+  width:140px; height:2px;
+  background:rgba(255,255,255,0.08); margin-top:8px;
+}
+.progress-fill { height:100%; width:0%; background:#c9a84c; }
+
+.timer-num {
+  font-size:34px; font-weight:300; color:#fff;
+  letter-spacing:-1px; line-height:1; font-variant-numeric:tabular-nums;
+}
+.timer-num.warn { color:#c9a84c; }
+.timer-num.end { color:#7fbf7f; }
+.timer-sub {
+  font-size:9px; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; color:rgba(255,255,255,0.3);
+  margin-top:3px; text-align:right;
+}
+
+/* CENTER */
+#cbt {
+  pointer-events:none;
+  padding:0 22px;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+}
+
+.phase-tag {
+  font-size:9px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:#c9a84c;
+}
+
+.cbt-panel {
+  background:rgba(0,0,0,0.85);
+  border-left:2px solid #c9a84c;
+  padding:18px 22px; max-width:380px; width:100%;
+}
+
+.cbt-heading {
+  font-size:17px; font-weight:500; color:#fff;
+  line-height:1.5; margin-bottom:10px;
+}
+
+.cbt-body {
+  font-size:14px; font-weight:300;
+  color:rgba(255,255,255,0.62); line-height:1.8;
+}
+
+.dist-panel {
+  background:rgba(0,0,0,0.8);
+  border-left:2px solid rgba(180,60,60,0.8);
+  padding:14px 18px; max-width:380px; width:100%; display:none;
+}
+.dist-tag {
+  font-size:9px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:rgba(200,80,80,0.9); margin-bottom:6px;
+}
+.dist-body {
+  font-size:13px; font-weight:300;
+  color:rgba(255,255,255,0.58); line-height:1.7;
+}
+
+.craving-row {
+  display:flex; align-items:center; gap:10px;
+  max-width:380px; width:100%;
+}
+.craving-tag {
+  font-size:9px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:rgba(255,255,255,0.3); flex-shrink:0;
+}
+.craving-scale { flex:1; height:2px; background:rgba(255,255,255,0.08); }
+.craving-fill { height:100%; }
+.craving-val {
+  font-size:11px; color:rgba(255,255,255,0.38);
+  flex-shrink:0; width:32px; text-align:right;
+}
+
+/* BOTTOM */
+#bottom { pointer-events:all; padding:0 22px 40px; }
+
+.btn-primary {
+  width:100%; padding:15px 20px; background:transparent;
+  border:1px solid #7fbf7f; color:#7fbf7f;
+  font-size:12px; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; cursor:pointer;
+  display:none; align-items:center; justify-content:center;
+}
+.btn-primary.show { display:flex; }
+
+/* COMPLETION */
+#completion {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:#050304;
+  flex-direction:column; align-items:flex-start; justify-content:center;
+  padding:40px 32px;
+}
+#completion.show { display:flex; }
+.comp-label {
+  font-size:9px; font-weight:700; letter-spacing:3px;
+  text-transform:uppercase; color:#c9a84c; margin-bottom:20px;
+}
+.comp-title {
+  font-size:28px; font-weight:300; color:#fff;
+  line-height:1.3; margin-bottom:20px;
+}
+.comp-title strong { font-weight:600; color:#7fbf7f; }
+.comp-divider { width:40px; height:1px; background:#c9a84c; margin-bottom:20px; }
+.comp-text {
+  font-size:13px; font-weight:300;
+  color:rgba(255,255,255,0.5); line-height:1.9;
+  margin-bottom:32px; max-width:340px;
+}
+.comp-xp {
+  font-size:11px; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; color:#c9a84c; margin-bottom:32px;
+}
+.comp-btn-main {
+  width:100%; padding:15px; background:transparent;
+  border:1px solid #7fbf7f; color:#7fbf7f;
+  font-size:11px; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; cursor:pointer; margin-bottom:10px;
+}
+.comp-btn-sec {
+  width:100%; padding:13px; background:transparent;
+  border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.35);
+  font-size:11px; font-weight:500; letter-spacing:1.5px;
+  text-transform:uppercase; cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ CASINO SCENE ═══ -->
+<div id="casino">
+
+  <!-- Потолок -->
+  <div class="ceiling"></div>
+
+  <!-- Главная люстра -->
+  <div class="chandelier">
+    <div class="chandelier-bar"></div>
+    <div class="chandelier-body">
+      <div class="chandelier-gem"></div>
+      <div class="chandelier-gem"></div>
+      <div class="chandelier-gem"></div>
+      <div class="chandelier-gem"></div>
+      <div class="chandelier-gem"></div>
+    </div>
+    <div class="chandelier-glow"></div>
+  </div>
+
+  <!-- Боковые люстры -->
+  <div class="side-light left">
+    <div class="side-light-bar"></div>
+    <div class="side-light-body"></div>
+    <div class="side-light-glow"></div>
+  </div>
+  <div class="side-light right">
+    <div class="side-light-bar"></div>
+    <div class="side-light-body"></div>
+    <div class="side-light-glow"></div>
+  </div>
+
+  <!-- Стены -->
+  <div class="wall-left"></div>
+  <div class="wall-right"></div>
+
+  <!-- Пол -->
+  <div class="floor"></div>
+
+  <!-- ── ГЛАВНЫЙ ПОКЕРНЫЙ СТОЛ ── -->
+  <div class="poker-table-main">
+    <div class="table-body">
+      <div class="table-felt">
+        <!-- Фишки -->
+        <div class="chip" style="width:14px;height:14px;background:#8b1a1a;top:20px;left:30px;"></div>
+        <div class="chip" style="width:14px;height:14px;background:#1a1a8b;top:17px;left:36px;"></div>
+        <div class="chip" style="width:14px;height:14px;background:#8b8b1a;top:22px;left:33px;"></div>
+        <div class="chip" style="width:14px;height:14px;background:#1a6b1a;top:28px;left:55px;"></div>
+        <div class="chip" style="width:14px;height:14px;background:#8b1a1a;top:25px;left:62px;"></div>
+        <!-- Карты в центре -->
+        <div class="card" style="width:22px;height:30px;top:16px;left:110px;transform:rotate(-5deg);"></div>
+        <div class="card" style="width:22px;height:30px;top:14px;left:130px;transform:rotate(3deg);"></div>
+        <div class="card" style="width:22px;height:30px;top:15px;left:150px;transform:rotate(-2deg);"></div>
+        <div class="card" style="width:22px;height:30px;top:16px;left:170px;transform:rotate(6deg);background:#e8d0d0;"></div>
+        <!-- Стопка карт справа -->
+        <div class="card" style="width:22px;height:30px;top:18px;right:25px;background:#c8b8a8;"></div>
+        <div class="card" style="width:22px;height:30px;top:16px;right:23px;background:#d8c8b8;"></div>
+      </div>
+      <div class="table-edge"></div>
+    </div>
+  </div>
+
+  <!-- ── ЛЕВЫЙ СТОЛ ── -->
+  <div class="poker-table-left">
+    <div class="table-body-sm">
+      <div class="table-felt-sm">
+        <div class="chip" style="width:11px;height:11px;background:#8b1a1a;top:12px;left:20px;position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.2);"></div>
+        <div class="chip" style="width:11px;height:11px;background:#1a6b1a;top:10px;left:27px;position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.2);"></div>
+        <div class="card" style="width:16px;height:22px;top:12px;left:70px;position:absolute;border-radius:1px;background:#f5f0e8;box-shadow:0 1px 3px rgba(0,0,0,0.6);"></div>
+        <div class="card" style="width:16px;height:22px;top:10px;left:85px;position:absolute;border-radius:1px;background:#f5f0e8;box-shadow:0 1px 3px rgba(0,0,0,0.6);transform:rotate(8deg);"></div>
+      </div>
+      <div class="table-edge-sm"></div>
+    </div>
+  </div>
+
+  <!-- ── ПРАВЫЙ СТОЛ ── -->
+  <div class="poker-table-right">
+    <div class="table-body-sm">
+      <div class="table-felt-sm">
+        <div class="chip" style="width:11px;height:11px;background:#8b7a10;top:14px;right:20px;position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.2);"></div>
+        <div class="chip" style="width:11px;height:11px;background:#1a1a8b;top:11px;right:28px;position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.2);"></div>
+        <div class="card" style="width:16px;height:22px;top:12px;left:20px;position:absolute;border-radius:1px;background:#f5f0e8;box-shadow:0 1px 3px rgba(0,0,0,0.6);"></div>
+        <div class="card" style="width:16px;height:22px;top:10px;left:35px;position:absolute;border-radius:1px;background:#e8d0d0;box-shadow:0 1px 3px rgba(0,0,0,0.6);transform:rotate(-5deg);"></div>
+      </div>
+      <div class="table-edge-sm"></div>
+    </div>
+  </div>
+
+  <!-- ── ИГРОВОЙ АППАРАТ ЛЕВЫЙ ── -->
+  <div class="slot-machine left-slot">
+    <div class="slot-body">
+      <div class="slot-lights">
+        <div class="slot-light y"></div>
+        <div class="slot-light r"></div>
+        <div class="slot-light y"></div>
+        <div class="slot-light g"></div>
+        <div class="slot-light y"></div>
+      </div>
+      <div class="slot-screen">
+        <div class="slot-reel">7</div>
+        <div class="slot-reel">♦</div>
+        <div class="slot-reel">7</div>
+      </div>
+      <div style="position:absolute;bottom:30px;left:8px;right:18px;height:24px;background:#0a0012;border-radius:2px;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:9px;color:rgba(255,180,0,0.5);letter-spacing:1px;">INSERT COIN</span>
+      </div>
+      <div class="slot-buttons">
+        <div class="slot-btn red"></div>
+        <div class="slot-btn yellow"></div>
+        <div class="slot-btn red"></div>
+      </div>
+      <div class="slot-lever"></div>
+    </div>
+    <div class="slot-base"></div>
+  </div>
+
+  <!-- ── ИГРОВОЙ АППАРАТ ПРАВЫЙ ── -->
+  <div class="slot-machine right-slot">
+    <div class="slot-body" style="background:linear-gradient(180deg,#1a0808 0%,#120505 100%);">
+      <div class="slot-lights">
+        <div class="slot-light r"></div>
+        <div class="slot-light y"></div>
+        <div class="slot-light r"></div>
+        <div class="slot-light y"></div>
+        <div class="slot-light r"></div>
+      </div>
+      <div class="slot-screen">
+        <div class="slot-reel">♠</div>
+        <div class="slot-reel">BAR</div>
+        <div class="slot-reel">♠</div>
+      </div>
+      <div style="position:absolute;bottom:30px;left:8px;right:18px;height:24px;background:#120000;border-radius:2px;border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:9px;color:rgba(255,100,0,0.5);letter-spacing:1px;">PLAY MAX</span>
+      </div>
+      <div class="slot-buttons">
+        <div class="slot-btn red"></div>
+        <div class="slot-btn red"></div>
+        <div class="slot-btn yellow"></div>
+      </div>
+      <div class="slot-lever"></div>
+    </div>
+    <div class="slot-base" style="background:linear-gradient(180deg,#0d0204,#080102);"></div>
+  </div>
+
+  <!-- Виньетка и дымка -->
+  <div class="vignette"></div>
+  <div class="haze"></div>
+
+</div>
+
+<!-- ═══ UI ═══ -->
+<div id="overlay">
+
+  <div id="top">
+    <div>
+      <div class="scene-tag">Cue Exposure Therapy · Casino</div>
+      <div class="progress-line"><div class="progress-fill" id="progress"></div></div>
+    </div>
+    <div>
+      <div class="timer-num" id="timer">2:30</div>
+      <div class="timer-sub">Remaining</div>
+    </div>
+  </div>
+
+  <div id="cbt">
+    <div class="phase-tag" id="phase-tag">Phase 01 — Awareness</div>
+    <div class="cbt-panel">
+      <div class="cbt-heading" id="cbt-heading">You notice the trigger.</div>
+      <div class="cbt-body" id="cbt-body">Look around. Your brain is responding to environmental cues — the felt, the chips, the machines. This is a conditioned reflex. Not a genuine need.</div>
+    </div>
+    <div class="dist-panel" id="dist-panel">
+      <div class="dist-tag">Cognitive Distortion Identified</div>
+      <div class="dist-body" id="dist-body"></div>
+    </div>
+    <div class="craving-row">
+      <div class="craving-tag">Craving</div>
+      <div class="craving-scale"><div class="craving-fill" id="craving-fill" style="width:30%;background:#4a7a4a"></div></div>
+      <div class="craving-val" id="craving-val">3 / 10</div>
+    </div>
+  </div>
+
+  <div id="bottom">
+    <button class="btn-primary" id="btn-done" onclick="finish()">I Resisted the Trigger</button>
+  </div>
+
+</div>
+
+<div id="completion">
+  <div class="comp-label">Session Complete</div>
+  <div class="comp-title">You held on.<br><strong>Two and a half minutes. No action.</strong></div>
+  <div class="comp-divider"></div>
+  <div class="comp-text">
+    Your brain has registered a new pattern:<br>the trigger appeared — and nothing happened.<br><br>
+    Each repetition weakens the conditioned response.<br>This is how Cue Exposure Therapy works.
+  </div>
+  <div class="comp-xp">+ 30 Experience Points</div>
+  <button class="comp-btn-main" onclick="window.parent.postMessage('cet_complete_gambling','*')">Return to Application</button>
+  <button class="comp-btn-sec" onclick="restart()">Repeat Session</button>
+</div>
+
+<script>
+const PHASES = [
+  { at:0, tag:'Phase 01 — Awareness', heading:'You notice the trigger.', body:'Look around. Your brain is responding to environmental cues — the felt, the chips, the machines. This is a conditioned reflex. Not a genuine need.', craving:3, distortion:null },
+  { at:30, tag:'Phase 02 — Cognitive Distortion', heading:'"I feel like tonight is different."', body:'This feeling is familiar — and it is false. The probability of any outcome does not change based on how you feel. The house edge is fixed.', craving:6, distortion:'Illusion of control. The belief that personal factors influence random outcomes is one of the most documented cognitive distortions in gambling disorder.' },
+  { at:60, tag:'Phase 03 — Urge Surfing', heading:'Observe. Do not act.', body:'The urge has peaked. This is the most intense moment — and it will pass without any action on your part. You are not required to respond to this feeling.', craving:9, distortion:'Near-miss effect. "Almost winning" activates the same neural reward pathways as winning. Your brain is being deceived by design.' },
+  { at:90, tag:'Phase 04 — Reframing', heading:'Consider the actual outcome.', body:'If you played — what follows? Financial loss, diminished self-regard, intensified craving to recover losses. This is the cycle. You are currently outside of it.', craving:5, distortion:null },
+  { at:120, tag:'Phase 05 — Completion', heading:'The wave is passing.', body:'You observed the trigger environment for two minutes without acting. The neural pathway connecting this cue to compulsive behavior has been interrupted.', craving:2, distortion:null }
+];
+
+const TOTAL=150;
+let elapsed=0, intv=null, curPhase=0;
+function pad(n){return String(n).padStart(2,'0');}
+
+function tick(){
+  elapsed++;
+  const rem=TOTAL-elapsed;
+  if(rem<=0){
+    clearInterval(intv);
+    document.getElementById('timer').textContent='0:00';
+    document.getElementById('timer').className='timer-num end';
+    document.getElementById('btn-done').classList.add('show');
+    return;
+  }
+  document.getElementById('timer').textContent=Math.floor(rem/60)+':'+pad(rem%60);
+  document.getElementById('timer').className='timer-num'+(rem<=30?' end':rem<=60?' warn':'');
+  document.getElementById('progress').style.width=((elapsed/TOTAL)*100)+'%';
+  const next=curPhase+1;
+  if(next<PHASES.length && elapsed>=PHASES[next].at){
+    curPhase=next;
+    showPhase(PHASES[curPhase]);
+  }
+}
+
+function showPhase(p){
+  document.getElementById('phase-tag').textContent=p.tag;
+  document.getElementById('cbt-heading').textContent=p.heading;
+  document.getElementById('cbt-body').textContent=p.body;
+  const dist=document.getElementById('dist-panel');
+  if(p.distortion){dist.style.display='block';document.getElementById('dist-body').textContent=p.distortion;}
+  else dist.style.display='none';
+  const fill=document.getElementById('craving-fill');
+  fill.style.width=(p.craving/10*100)+'%';
+  fill.style.background=p.craving>=7?'#8b3030':p.craving>=5?'#c9a84c':'#4a7a4a';
+  document.getElementById('craving-val').textContent=p.craving+' / 10';
+}
+
+function finish(){clearInterval(intv);document.getElementById('completion').classList.add('show');}
+
+function restart(){
+  elapsed=0;curPhase=0;
+  document.getElementById('completion').classList.remove('show');
+  document.getElementById('progress').style.width='0%';
+  document.getElementById('btn-done').classList.remove('show');
+  document.getElementById('dist-panel').style.display='none';
+  showPhase(PHASES[0]);
+  intv=setInterval(tick,1000);
+}
+
+showPhase(PHASES[0]);
+intv=setInterval(tick,1000);
+</script>
+</body>
+</html>
