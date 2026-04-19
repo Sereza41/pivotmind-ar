@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CUE EXPOSURE — BAR</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --amber: #D4821A;
+    --amber-glow: #F5A623;
+    --deep: #0A0604;
+    --warm-dark: #1A0E05;
+    --glass: rgba(212, 130, 26, 0.08);
+    --text: #E8D5B0;
+    --muted: #7A6040;
+    --danger: #C0392B;
+    --safe: #27AE60;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Rajdhani', sans-serif;
+  }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: var(--sans);
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Ambient bar atmosphere */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(212,130,26,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 80% 20%, rgba(180,80,20,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(100,50,10,0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Noise texture */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #scene {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+  }
+
+  /* VIDEO BACKGROUND */
+  #video-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.2;
+    filter: saturate(0.4) sepia(0.4) brightness(0.6);
+    z-index: 0;
+  }
+
+  /* SCANLINE OVERLAY */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* TOP HUD */
+  .hud-top {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(212,130,26,0.2);
+    background: rgba(10,6,4,0.7);
+    backdrop-filter: blur(10px);
+  }
+
+  .hud-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--amber);
+    text-transform: uppercase;
+  }
+
+  .hud-label span {
+    color: var(--muted);
+  }
+
+  .timer {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--amber-glow);
+    text-shadow: 0 0 20px rgba(245,166,35,0.5);
+    letter-spacing: 2px;
+  }
+
+  /* PULSE DOTS */
+  .pulse-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    opacity: 0.3;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.3s; }
+  .dot:nth-child(3) { animation-delay: 0.6s; }
+  .dot:nth-child(4) { animation-delay: 0.9s; }
+  .dot:nth-child(5) { animation-delay: 1.2s; }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* MAIN CONTENT AREA */
+  .content-area {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  /* CBT PANEL */
+  .cbt-panel {
+    background: rgba(5,3,2,0.96);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212,130,26,0.35);
+    border-left: 4px solid var(--amber);
+    padding: 28px 32px;
+    max-width: 480px;
+    width: 100%;
+    position: relative;
+    display: none;
+    animation: panel-in 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.8);
+  }
+
+  .cbt-panel.active { display: block; }
+
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .phase-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .phase-tag::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(212,130,26,0.3);
+  }
+
+  .cbt-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+  }
+
+  .cbt-text {
+    font-size: 16px;
+    font-weight: 400;
+    color: #F0E6D0;
+    line-height: 1.7;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+
+  /* CRAVING METER */
+  .craving-bar {
+    position: relative;
+    z-index: 10;
+    padding: 14px 20px;
+    background: rgba(10,6,4,0.8);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(212,130,26,0.15);
+  }
+
+  .craving-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .craving-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .craving-value {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--amber-glow);
+  }
+
+  .craving-track {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .craving-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1.5s cubic-bezier(0.4,0,0.2,1), background 1s;
+    position: relative;
+  }
+
+  .craving-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: inherit;
+    box-shadow: 0 0 10px currentColor;
+  }
+
+  /* BOTTOM CONTROLS */
+  .controls {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(10,6,4,0.9);
+    border-top: 1px solid rgba(212,130,26,0.1);
+  }
+
+  .btn-next {
+    flex: 1;
+    padding: 14px;
+    background: var(--amber);
+    color: var(--deep);
+    border: none;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-next::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+
+  .btn-next:hover::before { transform: translateX(0); }
+  .btn-next:hover { box-shadow: 0 0 20px rgba(212,130,26,0.4); }
+  .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-exit {
+    padding: 14px 20px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid rgba(120,96,64,0.3);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .btn-exit:hover {
+    color: var(--text);
+    border-color: rgba(212,130,26,0.4);
+  }
+
+  /* BAR AMBIENT ELEMENTS */
+  .bar-elements {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .bottle {
+    position: absolute;
+    font-size: 40px;
+    opacity: 0.06;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .bottle:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+  .bottle:nth-child(2) { top: 60%; right: 10%; animation-delay: 2s; font-size: 28px; }
+  .bottle:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 4s; font-size: 22px; }
+  .bottle:nth-child(4) { top: 30%; right: 20%; animation-delay: 1s; font-size: 35px; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(-5deg); }
+    50% { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  /* GLOW LIGHTS effect */
+  .bar-light {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.08;
+    animation: light-pulse 4s ease-in-out infinite;
+  }
+
+  .bar-light:nth-child(5) {
+    width: 200px; height: 200px;
+    background: #D4821A;
+    top: 0; left: 20%;
+    animation-delay: 0s;
+  }
+
+  .bar-light:nth-child(6) {
+    width: 150px; height: 150px;
+    background: #8B1A1A;
+    bottom: 10%; right: 15%;
+    animation-delay: 2s;
+  }
+
+  @keyframes light-pulse {
+    0%, 100% { opacity: 0.05; transform: scale(1); }
+    50% { opacity: 0.12; transform: scale(1.1); }
+  }
+
+  /* COMPLETION SCREEN */
+  #completion {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,6,4,0.95);
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    animation: fade-in 0.8s ease;
+  }
+
+  #completion.show { display: flex; }
+
+  @keyframes fade-in {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  .completion-icon {
+    font-size: 56px;
+    margin-bottom: 20px;
+    animation: icon-pop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+  }
+
+  @keyframes icon-pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .completion-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--safe);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .completion-text {
+    font-size: 15px;
+    color: var(--text);
+    opacity: 0.8;
+    line-height: 1.7;
+    max-width: 340px;
+    margin-bottom: 32px;
+  }
+
+  .completion-stat {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--amber);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .btn-complete {
+    padding: 16px 40px;
+    background: var(--safe);
+    color: #fff;
+    border: none;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-complete:hover {
+    box-shadow: 0 0 25px rgba(39,174,96,0.4);
+    transform: translateY(-1px);
+  }
+</style>
+</head>
+<body>
+
+<!-- Bar ambient atmosphere -->
+<div class="bar-elements">
+  <div class="bottle">🍺</div>
+  <div class="bottle">🥃</div>
+  <div class="bottle">🍷</div>
+  <div class="bottle">🍾</div>
+  <div class="bar-light"></div>
+  <div class="bar-light"></div>
+</div>
+
+<div class="scanlines"></div>
+
+<!-- VIDEO BACKGROUND - replace src with your bar/pub video -->
+<video id="video-bg" autoplay muted loop playsinline>
+  <source src="https://assets.mixkit.co/videos/preview/mixkit-bar-with-people-drinking-and-talking-2748-large.mp4" type="video/mp4">
+</video>
+
+<div id="scene">
+
+  <!-- TOP HUD -->
+  <div class="hud-top">
+    <div class="hud-label">● CUE EXPOSURE THERAPY <span>/ BAR</span></div>
+    <div class="pulse-dots">
+      <div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+    <div class="timer" id="timer">2:30</div>
+  </div>
+
+  <!-- CONTENT AREA -->
+  <div class="content-area">
+
+    <!-- PHASE 1: AWARENESS -->
+    <div class="cbt-panel active" id="phase-1">
+      <div class="phase-tag">Phase 01 — Awareness</div>
+      <div class="cbt-title">You notice the trigger.</div>
+      <div class="cbt-text">
+        Look around. The smell of alcohol, familiar sounds, the warmth of a crowd. Your brain is responding to environmental cues — conditioned over time. This is a learned reflex. Not a genuine need.
+      </div>
+    </div>
+
+    <!-- PHASE 2: RECOGNITION -->
+    <div class="cbt-panel" id="phase-2">
+      <div class="phase-tag">Phase 02 — Recognition</div>
+      <div class="cbt-title">Name what you feel.</div>
+      <div class="cbt-text">
+        Notice the urge without acting on it. Where do you feel it in your body? Chest? Throat? Hands? This sensation is temporary — it will peak and pass within minutes. You are not your craving.
+      </div>
+    </div>
+
+    <!-- PHASE 3: COGNITIVE REFRAME -->
+    <div class="cbt-panel" id="phase-3">
+      <div class="phase-tag">Phase 03 — Reframe</div>
+      <div class="cbt-title">Separate the story from the fact.</div>
+      <div class="cbt-text">
+        Your mind says "one drink won't hurt." That's the addiction speaking — not reality. The truth: alcohol never delivered what it promised. Relief was temporary. The cost was real. You know this.
+      </div>
+    </div>
+
+    <!-- PHASE 4: URGE SURFING -->
+    <div class="cbt-panel" id="phase-4">
+      <div class="phase-tag">Phase 04 — Urge Surfing</div>
+      <div class="cbt-title">Ride the wave.</div>
+      <div class="cbt-text">
+        Cravings are like waves — they build, peak, and break on their own. You don't need to fight it or give in. Just observe it. Breathe through it. The wave is already beginning to fall. You're still here.
+      </div>
+    </div>
+
+    <!-- PHASE 5: INTEGRATION -->
+    <div class="cbt-panel" id="phase-5">
+      <div class="phase-tag">Phase 05 — Integration</div>
+      <div class="cbt-title">You chose yourself.</div>
+      <div class="cbt-text">
+        You stayed present in a high-risk environment and did not break. Each session like this rewires your brain — weakening the trigger response, building new neural pathways. This is real, biological change.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CRAVING METER -->
+  <div class="craving-bar">
+    <div class="craving-header">
+      <div class="craving-label">Craving Intensity</div>
+      <div class="craving-value" id="craving-text">3 / 10</div>
+    </div>
+    <div class="craving-track">
+      <div class="craving-fill" id="craving-fill" style="width:30%; background: linear-gradient(90deg, #27AE60, #F39C12);"></div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="btn-exit" onclick="exitScene()">EXIT</button>
+    <button class="btn-next" id="next-btn" onclick="nextPhase()">CONTINUE →</button>
+  </div>
+
+</div>
+
+<!-- COMPLETION -->
+<div id="completion">
+  <div class="completion-icon">🧠</div>
+  <div class="completion-title">Session Complete</div>
+  <div class="completion-text">
+    You faced the trigger and chose differently. Your brain just built a new pathway. Every session makes the next one easier.
+  </div>
+  <div class="completion-stat">Neural rewiring in progress</div>
+  <br>
+  <button class="btn-complete" onclick="exitScene()">BACK TO MENTOR</button>
+</div>
+
+<script>
+  const phases = [
+    { id: 'phase-1', craving: 30, cravingText: '3 / 10', color: 'linear-gradient(90deg, #27AE60, #F39C12)' },
+    { id: 'phase-2', craving: 55, cravingText: '5.5 / 10', color: 'linear-gradient(90deg, #F39C12, #E67E22)' },
+    { id: 'phase-3', craving: 70, cravingText: '7 / 10', color: 'linear-gradient(90deg, #E67E22, #C0392B)' },
+    { id: 'phase-4', craving: 45, cravingText: '4.5 / 10', color: 'linear-gradient(90deg, #F39C12, #27AE60)' },
+    { id: 'phase-5', craving: 15, cravingText: '1.5 / 10', color: 'linear-gradient(90deg, #27AE60, #2ECC71)' },
+  ];
+
+  let current = 0;
+  let totalSeconds = 150;
+  let timerInterval;
+
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      totalSeconds--;
+      if (totalSeconds <= 0) { clearInterval(timerInterval); completeSession(); return; }
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      document.getElementById('timer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    }, 1000);
+  }
+
+  function nextPhase() {
+    // Hide current
+    document.getElementById(phases[current].id).classList.remove('active');
+    current++;
+
+    if (current >= phases.length) { completeSession(); return; }
+
+    // Show next
+    const p = phases[current];
+    document.getElementById(p.id).classList.add('active');
+
+    // Update craving
+    document.getElementById('craving-fill').style.width = p.craving + '%';
+    document.getElementById('craving-fill').style.background = p.color;
+    document.getElementById('craving-text').textContent = p.cravingText;
+
+    // Last phase — change button
+    if (current === phases.length - 1) {
+      document.getElementById('next-btn').textContent = 'COMPLETE ✓';
+    }
+  }
+
+  function completeSession() {
+    clearInterval(timerInterval);
+    document.getElementById('completion').classList.add('show');
+  }
+
+  function exitScene() {
+    // Navigate back — adjust URL to your Bubble app
+    window.history.back();
+  }
+
+  startTimer();
+</script>
+</body>
+</html>
