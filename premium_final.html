@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PivotMind Premium</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --purple: #6C3FC5;
+    --purple-light: #8B5CF6;
+    --teal: #0D9488;
+    --gold: #F59E0B;
+    --dark: #0F0A1E;
+    --card: #1A1035;
+    --text: #F1F0FF;
+    --muted: #9B8FBF;
+    --border: rgba(108,63,197,0.3);
+  }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(108,63,197,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(13,148,136,0.1) 0%, transparent 60%);
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 480px; margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(108,63,197,0.2);
+    border: 1px solid rgba(108,63,197,0.4);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #A78BFA;
+    margin-bottom: 24px;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #A78BFA;
+    animation: badge-pulse 2s ease-in-out infinite;
+  }
+  @keyframes badge-pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* ── HERO ── */
+  .hero-title {
+    font-size: 32px; font-weight: 800;
+    line-height: 1.15; margin-bottom: 12px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #A78BFA 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 15px; color: var(--muted);
+    line-height: 1.65; margin-bottom: 32px;
+  }
+
+  .hero-sub strong { color: var(--text); font-weight: 600; }
+
+  /* ── FEATURE CARDS ── */
+  .features { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex; gap: 16px; align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+
+  .feature-card:hover { border-color: rgba(108,63,197,0.6); }
+
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+
+  .icon-ai   { background: linear-gradient(135deg, rgba(108,63,197,0.3), rgba(139,92,246,0.2)); border: 1px solid rgba(139,92,246,0.3); }
+  .icon-ar   { background: linear-gradient(135deg, rgba(13,148,136,0.3), rgba(20,184,166,0.2)); border: 1px solid rgba(20,184,166,0.3); }
+  .icon-cbt  { background: linear-gradient(135deg, rgba(245,158,11,0.3), rgba(251,191,36,0.2)); border: 1px solid rgba(251,191,36,0.3); }
+
+  .feature-content {}
+
+  .feature-title {
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 4px; color: #FFFFFF;
+  }
+
+  .feature-desc {
+    font-size: 13px; color: var(--muted); line-height: 1.55;
+  }
+
+  .feature-tag {
+    display: inline-block; margin-top: 8px;
+    font-size: 10px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+  }
+
+  .tag-available { background: rgba(13,148,136,0.2); color: #2DD4BF; border: 1px solid rgba(45,212,191,0.3); }
+  .tag-premium   { background: rgba(245,158,11,0.15); color: #FCD34D; border: 1px solid rgba(252,211,77,0.3); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px; color: var(--muted); font-size: 12px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(108,63,197,0.25);
+  }
+
+  /* ── PRICING CARD ── */
+  .pricing-card {
+    background: linear-gradient(135deg, rgba(108,63,197,0.15), rgba(13,148,136,0.1));
+    border: 1px solid rgba(108,63,197,0.5);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+
+  .pricing-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--teal));
+  }
+
+  .pricing-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: #A78BFA;
+    margin-bottom: 12px;
+  }
+
+  .pricing-price {
+    display: flex; align-items: baseline; gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .price-amount {
+    font-size: 42px; font-weight: 800; color: #FFFFFF;
+    line-height: 1;
+  }
+
+  .price-period {
+    font-size: 14px; color: var(--muted); font-weight: 400;
+  }
+
+  .pricing-note {
+    font-size: 12px; color: var(--muted); margin-bottom: 20px;
+  }
+
+  .pricing-note strong { color: #A78BFA; }
+
+  .pricing-includes {
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;
+  }
+
+  .include-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--text);
+  }
+
+  .include-check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(45,212,191,0.2);
+    border: 1px solid rgba(45,212,191,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; flex-shrink: 0; color: #2DD4BF;
+  }
+
+  /* ── CTA BUTTON ── */
+  .btn-cta {
+    width: 100%; padding: 16px;
+    background: rgba(108,63,197,0.25);
+    border: 1px solid rgba(108,63,197,0.5);
+    border-radius: 12px;
+    color: #A78BFA;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: default;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    position: relative;
+  }
+
+  .btn-cta .lock { font-size: 16px; }
+
+  .btn-coming {
+    position: absolute; right: 16px;
+    font-size: 9px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ── NOTIFY ── */
+  .notify-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .notify-icon { font-size: 20px; flex-shrink: 0; }
+
+  .notify-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .notify-text strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 13px; }
+
+  .btn-notify {
+    margin-left: auto; flex-shrink: 0;
+    padding: 8px 14px;
+    background: rgba(108,63,197,0.3);
+    border: 1px solid rgba(108,63,197,0.5);
+    border-radius: 8px;
+    color: #A78BFA;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-notify:hover { background: rgba(108,63,197,0.5); }
+  .btn-notify.clicked { background: rgba(13,148,136,0.3); border-color: rgba(45,212,191,0.4); color: #2DD4BF; }
+
+  /* ── COMPARISON ── */
+  .comparison {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+
+  .comparison-title {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .comparison-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px;
+  }
+  .comparison-row:last-child { border-bottom: none; }
+
+  .comp-label { color: var(--muted); }
+  .comp-value { font-weight: 600; }
+  .comp-value.green { color: #2DD4BF; }
+  .comp-value.gold  { color: #FCD34D; }
+
+  /* ── HUMAN NOTE ── */
+  .human-note {
+    background: linear-gradient(135deg, rgba(108,63,197,0.12), rgba(13,148,136,0.08));
+    border: 1px solid rgba(108,63,197,0.35);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .human-icon {
+    font-size: 40px;
+    margin-bottom: 14px;
+  }
+
+  .human-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .human-text {
+    font-size: 15px;
+    color: #C4B8E8;
+    line-height: 1.7;
+  }
+
+  /* ── BOTTOM NOTE ── */
+  .bottom-note {
+    text-align: center; font-size: 12px;
+    color: var(--muted); line-height: 1.6;
+  }
+  .bottom-note strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="container">
+
+  <div class="badge">
+    <div class="badge-dot"></div>
+    Premium Plan
+  </div>
+
+  <h1 class="hero-title">Your complete<br>recovery system.</h1>
+
+  <p class="hero-sub">
+    AI Mentor, AR Trigger Sessions, and a <strong>live CBT specialist</strong> who knows your journey — all in one place. This is not just an app. This is a structured path out.
+  </p>
+
+  <!-- FEATURES -->
+  <div class="features">
+
+    <div class="feature-card">
+      <div class="feature-icon icon-ai">🧠</div>
+      <div class="feature-content">
+        <div class="feature-title">AI Mentor — 24/7</div>
+        <div class="feature-desc">Available at 2am when the urge hits. Knows your triggers, your history, your progress. Responds in the moment — not next week.</div>
+        <span class="feature-tag tag-available">✓ Available now</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon icon-ar">🥽</div>
+      <div class="feature-content">
+        <div class="feature-title">AR Trigger Sessions</div>
+        <div class="feature-desc">Face the casino or bar in a safe environment. Train your brain to resist before you face it in real life. Science-backed Cue Exposure Therapy.</div>
+        <span class="feature-tag tag-available">✓ Available now</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon icon-cbt">👨‍⚕️</div>
+      <div class="feature-content">
+        <div class="feature-title">Live CBT Specialist</div>
+        <div class="feature-desc">A certified specialist who sees your PivotMind data — your streaks, triggers, journal — and works with exactly what you're going through. Not generic therapy. Yours.</div>
+        <span class="feature-tag tag-premium">🔒 Premium only</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider">Unlock the full system</div>
+
+  <!-- PRICING -->
+  <div class="pricing-card">
+    <div class="pricing-label">Premium Plan</div>
+    <div class="pricing-price">
+      <div class="price-amount">$29</div>
+      <div class="price-period">.99 / month</div>
+    </div>
+    <div class="pricing-note">
+      Less than <strong>one therapy session</strong>. Unlimited access, every day.
+    </div>
+    <div class="pricing-includes">
+      <div class="include-item"><div class="include-check">✓</div>AI Mentor — available 24/7, knows your history</div>
+      <div class="include-item"><div class="include-check">✓</div>AR Trigger Sessions — casino & bar environments</div>
+      <div class="include-item"><div class="include-check">✓</div>1 live session with a CBT specialist per month</div>
+      <div class="include-item"><div class="include-check">✓</div>Specialist sees your full PivotMind data</div>
+    </div>
+    <div class="btn-cta">
+      <span class="lock">🔒</span>
+      Unlock Premium
+      <span class="btn-coming">Coming soon</span>
+    </div>
+  </div>
+
+  <!-- NOTIFY -->
+  <div class="notify-box">
+    <div class="notify-icon">🔔</div>
+    <div class="notify-text">
+      <strong>Be the first to know</strong>
+      We'll notify you the moment Premium launches — with a founder discount.
+    </div>
+    <button class="btn-notify" id="notify-btn" onclick="notifyMe()">Notify me</button>
+  </div>
+
+
+
+  <div class="human-note">
+    <div class="human-icon">🤝</div>
+    <div class="human-title">Sometimes you need a real human.</div>
+    <div class="human-text">AI can guide you. AR can train you. But a real person who listens, understands, and has helped hundreds of people like you — that changes everything. Premium gives you that human layer.</div>
+  </div>
+
+</div>
+
+<script>
+  function notifyMe() {
+    const btn = document.getElementById('notify-btn');
+    btn.textContent = '✓ Noted';
+    btn.classList.add('clicked');
+    btn.disabled = true;
+  }
+</script>
+
+</body>
+</html>
