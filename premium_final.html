@@ -350,11 +350,61 @@
       <div class="include-item"><div class="include-check">✓</div>1 live session with a CBT specialist per month</div>
       <div class="include-item"><div class="include-check">✓</div>Specialist sees your full PivotMind data</div>
     </div>
-    <div class="btn-cta">
-      <span class="lock">🔒</span>
-      Unlock Premium
-      <span class="btn-coming">Coming soon</span>
-    </div>
+   <div id="notify-block">
+  <input 
+    type="email" 
+    id="notify-email" 
+    placeholder="Your email address"
+    style="
+      width:100%; padding:14px 16px;
+      background:rgba(255,255,255,0.07);
+      border:1px solid rgba(108,63,197,0.5);
+      border-radius:12px; color:#fff;
+      font-family:'Inter',sans-serif;
+      font-size:14px; margin-bottom:10px;
+      outline:none; box-sizing:border-box;
+    "
+  />
+  <button 
+    onclick="notifyMe()"
+    style="
+      width:100%; padding:16px;
+      background:linear-gradient(135deg,#6C3FC5,#0D9488);
+      border:none; border-radius:12px;
+      color:#fff; font-family:'Inter',sans-serif;
+      font-size:14px; font-weight:700;
+      cursor:pointer; letter-spacing:0.5px;
+    "
+  >
+    🔔 Notify Me When Premium Launches
+  </button>
+  <div id="notify-msg" style="display:none; text-align:center; margin-top:12px; color:#2DD4BF; font-size:13px;">
+    ✓ You're on the list! We'll notify you at launch.
+  </div>
+</div>
+
+<script>
+function notifyMe() {
+  const email = document.getElementById('notify-email').value;
+  if (!email || !email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  fetch('https://sereza26.bubbleapps.io/api/1.1/wf/save_waitlist_email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email })
+  })
+  .then(() => {
+    document.getElementById('notify-email').style.display = 'none';
+    document.querySelector('button[onclick="notifyMe()"]').style.display = 'none';
+    document.getElementById('notify-msg').style.display = 'block';
+  })
+  .catch(() => {
+    alert('Something went wrong. Please try again.');
+  });
+}
+</script>
   </div>
 
           </div>
