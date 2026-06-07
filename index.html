@@ -3,563 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CUE EXPOSURE — CASINO</title>
+<title>CUE EXPOSURE — GAMBLING</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --gold: #FFD700;
-    --gold2: #FFA500;
-    --red: #FF2244;
-    --deep: #1a0a00;
-    --text: #FFF8E7;
-    --muted: #A08040;
-    --safe: #00C853;
-    --mono: 'Share Tech Mono', monospace;
-    --sans: 'Rajdhani', sans-serif;
-  }
-
-  body {
-    background: #1a0500;
-    color: var(--text);
-    font-family: var(--sans);
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* ── ФОТО — ЯРКОЕ ── */
-  .bg-photo {
-    position: fixed; inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=1200&q=90');
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.75) saturate(1.4) contrast(1.1);
-    z-index: 0;
-    animation: slow-drift 30s ease-in-out infinite alternate;
-  }
-  @keyframes slow-drift {
-    from { transform: scale(1); }
-    to   { transform: scale(1.06) translateX(-1.5%); }
-  }
-
-  /* ── СВЕТОВЫЕ ПЯТНА (прожекторы казино) ── */
-  .spotlight {
-    position: fixed; z-index: 1; pointer-events: none;
-    border-radius: 50%;
-    mix-blend-mode: screen;
-    animation: spot-move ease-in-out infinite alternate;
-  }
-  .spot1 {
-    width: 300px; height: 300px;
-    top: -80px; left: 10%;
-    background: radial-gradient(circle, rgba(255,220,80,0.45) 0%, transparent 70%);
-    animation-duration: 8s;
-  }
-  .spot2 {
-    width: 250px; height: 250px;
-    top: -60px; right: 15%;
-    background: radial-gradient(circle, rgba(255,80,80,0.35) 0%, transparent 70%);
-    animation-duration: 6s; animation-delay: 2s;
-  }
-  .spot3 {
-    width: 200px; height: 200px;
-    bottom: 80px; left: 5%;
-    background: radial-gradient(circle, rgba(255,180,0,0.3) 0%, transparent 70%);
-    animation-duration: 10s; animation-delay: 1s;
-  }
-  .spot4 {
-    width: 220px; height: 220px;
-    bottom: 60px; right: 8%;
-    background: radial-gradient(circle, rgba(255,50,80,0.3) 0%, transparent 70%);
-    animation-duration: 7s; animation-delay: 3s;
-  }
-  @keyframes spot-move {
-    from { transform: translateY(0) scale(1); opacity: 0.8; }
-    to   { transform: translateY(30px) scale(1.2); opacity: 1; }
-  }
-
-  /* ── НЕОНОВЫЕ РАМКИ ── */
-  .neon-top {
-    position: fixed; top:0; left:0; right:0; height:5px; z-index:4;
-    background: linear-gradient(90deg, var(--red), var(--gold), var(--red), var(--gold), var(--red));
-    box-shadow: 0 0 20px 6px rgba(255,200,0,0.8), 0 0 40px 10px rgba(255,50,0,0.4);
-    animation: neon-top-pulse 2s ease-in-out infinite;
-  }
-  .neon-bottom {
-    position: fixed; bottom:0; left:0; right:0; height:5px; z-index:4;
-    background: linear-gradient(90deg, var(--gold), var(--red), var(--gold), var(--red), var(--gold));
-    box-shadow: 0 0 20px 6px rgba(255,200,0,0.8), 0 0 40px 10px rgba(255,50,0,0.4);
-    animation: neon-top-pulse 2s ease-in-out infinite 1s;
-  }
-  .neon-left {
-    position: fixed; left:0; top:0; bottom:0; width:5px; z-index:4;
-    background: linear-gradient(180deg, var(--red), var(--gold), var(--red));
-    box-shadow: 0 0 18px 5px rgba(255,50,50,0.7);
-    animation: neon-top-pulse 3s ease-in-out infinite 0.5s;
-  }
-  .neon-right {
-    position: fixed; right:0; top:0; bottom:0; width:5px; z-index:4;
-    background: linear-gradient(180deg, var(--gold), var(--red), var(--gold));
-    box-shadow: 0 0 18px 5px rgba(255,200,0,0.7);
-    animation: neon-top-pulse 3s ease-in-out infinite 1.5s;
-  }
-  @keyframes neon-top-pulse {
-    0%,100% { opacity:1; }
-    50% { opacity:0.5; }
-  }
-
-  /* ── МИГАЮЩИЕ ОГНИ ВВЕРХУ (как гирлянды казино) ── */
-  .lights-row {
-    position: fixed; top: 8px; left: 0; right: 0;
-    display: flex; justify-content: space-around;
-    padding: 0 20px; z-index: 5; pointer-events: none;
-  }
-  .light-bulb {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    animation: bulb-blink 1s steps(1) infinite;
-  }
-  .light-bulb:nth-child(odd)  { background: var(--gold); box-shadow: 0 0 8px 3px rgba(255,215,0,0.9); animation-delay: 0s; }
-  .light-bulb:nth-child(even) { background: var(--red);  box-shadow: 0 0 8px 3px rgba(255,34,68,0.9);  animation-delay: 0.5s; }
-  .light-bulb:nth-child(3n)   { background: #fff;        box-shadow: 0 0 8px 3px rgba(255,255,255,0.9); animation-delay: 0.25s; }
-  @keyframes bulb-blink {
-    0%,49%  { opacity: 1; }
-    50%,100%{ opacity: 0.15; }
-  }
-
-  /* ── ЛЁГКИЙ ТЁМНЫЙ ГРАДИЕНТ для читаемости текста ── */
-  .read-overlay {
-    position: fixed; inset: 0; z-index: 2; pointer-events: none;
-    background:
-      linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 20%, transparent 60%, rgba(0,0,0,0.5) 100%);
-  }
-
-  /* ── ЧАСТИЦЫ — МОНЕТЫ ── */
-  .particles { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
-  .particle {
-    position: absolute; border-radius: 50%; opacity: 0;
-    animation: particle-rise linear infinite;
-  }
-  @keyframes particle-rise {
-    0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
-    10%  { opacity: 0.9; }
-    90%  { opacity: 0.5; }
-    100% { transform: translateY(-100vh) translateX(var(--drift)) rotate(360deg); opacity:0; }
-  }
-
-  /* ── СИМВОЛЫ КАРТ — ЯРКИЕ ── */
-  .symbols { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
-  .sym {
-    position: absolute; opacity: 0;
-    animation: sym-float 10s ease-in-out infinite;
-    font-weight: bold;
-    text-shadow: 0 0 15px currentColor;
-  }
-  .sym.red  { color: #FF3355; }
-  .sym.gold { color: #FFD700; }
-  .sym.white{ color: #FFFFFF; }
-  .sym:nth-child(1){ top:12%;left:4%;   animation-delay:0s;   font-size:28px; }
-  .sym:nth-child(2){ top:68%;right:5%;  animation-delay:2.5s; font-size:22px; }
-  .sym:nth-child(3){ top:38%;right:3%;  animation-delay:5s;   font-size:30px; }
-  .sym:nth-child(4){ bottom:22%;left:6%;animation-delay:7.5s; font-size:18px; }
-  .sym:nth-child(5){ top:22%;right:10%; animation-delay:4s;   font-size:24px; }
-  .sym:nth-child(6){ bottom:38%;left:3%;animation-delay:9s;   font-size:32px; }
-  @keyframes sym-float {
-    0%  { opacity:0; transform:translateY(15px) rotate(-10deg) scale(0.7); }
-    15% { opacity:0.35; }
-    85% { opacity:0.35; }
-    100%{ opacity:0; transform:translateY(-30px) rotate(10deg) scale(1.2); }
-  }
-
-  /* ── SCENE ── */
-  #scene {
-    position:relative; width:100%; height:100vh;
-    display:flex; flex-direction:column; z-index:10;
-  }
-
-  /* ── HUD TOP ── */
-  .hud-top {
-    display:flex; justify-content:space-between; align-items:center;
-    padding: 18px 18px 12px;
-    border-bottom: 1px solid rgba(255,215,0,0.4);
-    background: rgba(15,5,0,0.7);
-    backdrop-filter: blur(16px);
-  }
-  .hud-label {
-    font-family: var(--mono); font-size:9px;
-    letter-spacing:3px; color:var(--gold); text-transform:uppercase;
-    text-shadow: 0 0 10px rgba(255,215,0,0.6);
-  }
-  .hud-label span { color: rgba(255,165,0,0.6); }
-  .timer {
-    font-family:var(--mono); font-size:22px;
-    color: var(--gold);
-    text-shadow: 0 0 25px rgba(255,215,0,1), 0 0 50px rgba(255,165,0,0.5);
-    letter-spacing:3px;
-  }
-  .timer.urgent { color:#FF2244; text-shadow:0 0 25px rgba(255,34,68,1); animation:timer-urgent 0.5s steps(1) infinite; }
-  @keyframes timer-urgent { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-  .pulse-dots { display:flex; gap:6px; align-items:center; }
-  .dot { width:7px; height:7px; border-radius:50%; animation:pulse-dot 1.5s ease-in-out infinite; }
-  .dot:nth-child(1){ background:#FF2244; box-shadow:0 0 8px #FF2244; animation-delay:0s; }
-  .dot:nth-child(2){ background:#FFD700; box-shadow:0 0 8px #FFD700; animation-delay:0.3s; }
-  .dot:nth-child(3){ background:#FF2244; box-shadow:0 0 8px #FF2244; animation-delay:0.6s; }
-  @keyframes pulse-dot {
-    0%,100%{opacity:0.3;transform:scale(1)}
-    50%{opacity:1;transform:scale(1.5)}
-  }
-
-  /* ── CONTENT ── */
-  .content-area {
-    flex:1; display:flex; align-items:center; justify-content:center; padding:16px;
-  }
-
-  .cbt-panel {
-    background: rgba(10,4,0,0.88);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba(255,215,0,0.5);
-    border-left: 4px solid var(--gold);
-    border-top: 1px solid rgba(255,215,0,0.8);
-    padding: 24px 26px;
-    max-width:440px; width:100%;
-    display:none;
-    animation: panel-in 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
-    box-shadow: 0 0 40px rgba(255,165,0,0.15), 0 8px 40px rgba(0,0,0,0.8);
-  }
-  .cbt-panel.active { display:block; }
-  @keyframes panel-in {
-    from { opacity:0; transform:translateY(16px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
-
-  .phase-tag {
-    font-family:var(--mono); font-size:9px; letter-spacing:4px;
-    color:var(--gold); text-transform:uppercase;
-    margin-bottom:12px; display:flex; align-items:center; gap:10px;
-    text-shadow: 0 0 8px rgba(255,215,0,0.6);
-  }
-  .phase-tag::after { content:''; flex:1; height:1px; background:rgba(255,215,0,0.3); }
-
-  .cbt-title { font-size:23px; font-weight:700; color:#FFFFFF; line-height:1.2; margin-bottom:12px; text-shadow:0 2px 8px rgba(0,0,0,0.8); }
-  .cbt-text  { font-size:15px; color:#F5E8C8; line-height:1.75; text-shadow:0 1px 4px rgba(0,0,0,0.6); }
-  .cbt-text em { color:var(--gold); font-style:normal; font-weight:600; }
-
-  /* ── CRAVING BAR ── */
-  .craving-bar {
-    padding:12px 18px;
-    background: rgba(10,4,0,0.82);
-    backdrop-filter:blur(10px);
-    border-top: 1px solid rgba(255,215,0,0.2);
-  }
-  .craving-header { display:flex; justify-content:space-between; margin-bottom:7px; }
-  .craving-label { font-family:var(--mono); font-size:9px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; }
-  .craving-value { font-family:var(--mono); font-size:11px; color:var(--gold); text-shadow:0 0 8px rgba(255,215,0,0.6); }
-  .craving-track { height:4px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
-  .craving-fill  { height:100%; border-radius:2px; transition:width 1.5s cubic-bezier(0.4,0,0.2,1), background 1s; }
-
-  /* ── CONTROLS ── */
-  .controls {
-    display:flex; gap:10px; padding:14px 18px;
-    background: rgba(10,4,0,0.92);
-    border-top: 1px solid rgba(255,215,0,0.2);
-  }
-  .btn-next {
-    flex:1; padding:14px;
-    background: linear-gradient(135deg, var(--gold), var(--gold2));
-    color:#1a0500; border:none;
-    font-family:var(--sans); font-size:13px; font-weight:700;
-    letter-spacing:2px; text-transform:uppercase;
-    cursor:pointer; transition:all 0.2s;
-    box-shadow: 0 0 20px rgba(255,215,0,0.4);
-  }
-  .btn-next:hover { box-shadow:0 0 35px rgba(255,215,0,0.7); transform:translateY(-1px); }
-  .btn-exit {
-    padding:14px 18px;
-    background:transparent; color:rgba(255,200,100,0.5);
-    border:1px solid rgba(255,200,100,0.2);
-    font-family:var(--mono); font-size:10px;
-    letter-spacing:2px; cursor:pointer;
-    transition:all 0.2s; text-transform:uppercase;
-  }
-  .btn-exit:hover { color:var(--gold); border-color:rgba(255,215,0,0.5); }
-
-  /* ── SOUND BTN ── */
-  .sound-btn {
-    position:fixed; top:65px; right:14px; z-index:20;
-    background:rgba(10,4,0,0.85);
-    border:1px solid rgba(255,215,0,0.4);
-    color:var(--gold); font-family:var(--mono);
-    font-size:10px; letter-spacing:1px;
-    padding:6px 10px; cursor:pointer; transition:all 0.2s;
-    text-shadow: 0 0 8px rgba(255,215,0,0.5);
-  }
-  .sound-btn:hover { border-color:var(--gold); box-shadow:0 0 12px rgba(255,215,0,0.3); }
-
-  /* ── COMPLETION ── */
-  #completion {
-    display:none; position:fixed; inset:0;
-    background:rgba(5,2,0,0.97); z-index:100;
-    flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:40px; animation:fade-in 0.8s ease;
-  }
-  #completion.show { display:flex; }
-  @keyframes fade-in { from{opacity:0} to{opacity:1} }
-  .completion-icon { font-size:56px; margin-bottom:20px; animation:icon-pop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
-  @keyframes icon-pop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
-  .completion-title { font-size:28px; font-weight:700; color:var(--safe); letter-spacing:1px; margin-bottom:12px; text-shadow:0 0 20px rgba(0,200,83,0.5); }
-  .completion-text { font-size:15px; color:var(--text); opacity:.85; line-height:1.7; max-width:320px; margin-bottom:10px; }
-  .completion-stat { font-family:var(--mono); font-size:10px; letter-spacing:3px; color:var(--gold); margin-bottom:28px; text-transform:uppercase; }
-  .btn-complete {
-    padding:15px 36px; background:var(--safe); color:#fff; border:none;
-    font-family:var(--sans); font-size:13px; font-weight:700;
-    letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
-  }
-  .btn-complete:hover { box-shadow:0 0 25px rgba(0,200,83,0.5); transform:translateY(-1px); }
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--gold:#FFD700;--gold2:#FFA500;--red:#FF3B5C;--text:#FFF8E7;--muted:#A58B6A;--safe:#00C853;--mono:'Share Tech Mono',monospace;--sans:'Rajdhani',sans-serif}
+  body{background:#0d0814;color:var(--text);font-family:var(--sans);height:100vh;overflow:hidden;position:relative}
+  .bg-photo{position:fixed;inset:0;background-image:url('https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=1600&q=90');background-size:cover;background-position:center;filter:brightness(.52) saturate(1.02) contrast(1.05);z-index:0;animation:slow-drift 30s ease-in-out infinite alternate}
+  @keyframes slow-drift{from{transform:scale(1)}to{transform:scale(1.04) translateX(-1%)}}
+  .spotlight{position:fixed;z-index:1;pointer-events:none;border-radius:50%;mix-blend-mode:screen;animation:spot-move ease-in-out infinite alternate}
+  .spot1{width:300px;height:300px;top:-80px;left:10%;background:radial-gradient(circle,rgba(255,220,80,.28) 0%,transparent 70%);animation-duration:8s}
+  .spot2{width:250px;height:250px;top:-60px;right:15%;background:radial-gradient(circle,rgba(180,120,255,.18) 0%,transparent 70%);animation-duration:6s;animation-delay:2s}
+  .spot3{width:200px;height:200px;bottom:80px;left:5%;background:radial-gradient(circle,rgba(255,180,0,.16) 0%,transparent 70%);animation-duration:10s;animation-delay:1s}
+  .spot4{width:220px;height:220px;bottom:60px;right:8%;background:radial-gradient(circle,rgba(255,70,120,.16) 0%,transparent 70%);animation-duration:7s;animation-delay:3s}
+  @keyframes spot-move{from{transform:translateY(0) scale(1);opacity:.65}to{transform:translateY(25px) scale(1.12);opacity:1}}
+  .neon-top,.neon-bottom{position:fixed;left:0;right:0;height:4px;z-index:4;animation:neon-top-pulse 2s ease-in-out infinite}
+  .neon-top{top:0;background:linear-gradient(90deg,var(--red),var(--gold),var(--red),var(--gold),var(--red));box-shadow:0 0 14px 3px rgba(255,200,0,.35),0 0 28px 7px rgba(255,50,0,.18)}
+  .neon-bottom{bottom:0;background:linear-gradient(90deg,var(--gold),var(--red),var(--gold),var(--red),var(--gold));box-shadow:0 0 14px 3px rgba(255,200,0,.3),0 0 28px 7px rgba(255,50,0,.16);animation-delay:1s}
+  .neon-left,.neon-right{position:fixed;top:0;bottom:0;width:4px;z-index:4;animation:neon-top-pulse 3s ease-in-out infinite}
+  .neon-left{left:0;background:linear-gradient(180deg,var(--red),var(--gold),var(--red));box-shadow:0 0 10px 2px rgba(255,50,50,.35)}
+  .neon-right{right:0;background:linear-gradient(180deg,var(--gold),var(--red),var(--gold));box-shadow:0 0 10px 2px rgba(255,200,0,.3);animation-delay:1.5s}
+  @keyframes neon-top-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  .lights-row{position:fixed;top:8px;left:0;right:0;display:flex;justify-content:space-around;padding:0 20px;z-index:5;pointer-events:none}
+  .light-bulb{width:9px;height:9px;border-radius:50%;animation:bulb-blink 1s steps(1) infinite}
+  .light-bulb:nth-child(odd){background:var(--gold);box-shadow:0 0 8px 3px rgba(255,215,0,.6)}
+  .light-bulb:nth-child(even){background:var(--red);box-shadow:0 0 8px 3px rgba(255,34,68,.6)}
+  .light-bulb:nth-child(3n){background:#fff;box-shadow:0 0 8px 3px rgba(255,255,255,.75)}
+  @keyframes bulb-blink{0%,49%{opacity:1}50%,100%{opacity:.12}}
+  .read-overlay{position:fixed;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.3) 0%,transparent 18%,transparent 60%,rgba(0,0,0,.55) 100%)}
+  .particles,.symbols{position:fixed;inset:0;z-index:3;pointer-events:none}
+  .particle{position:absolute;border-radius:50%;opacity:0;animation:particle-rise linear infinite}
+  @keyframes particle-rise{0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0}10%{opacity:.8}90%{opacity:.4}100%{transform:translateY(-100vh) translateX(var(--drift)) rotate(360deg);opacity:0}}
+  .sym{position:absolute;opacity:0;animation:sym-float 10s ease-in-out infinite;font-weight:700;text-shadow:0 0 15px currentColor}
+  .sym.red{color:#FF5775}.sym.gold{color:#FFD700}.sym.white{color:#FFFFFF}
+  .sym:nth-child(1){top:12%;left:4%;animation-delay:0s;font-size:28px}.sym:nth-child(2){top:68%;right:5%;animation-delay:2.5s;font-size:22px}.sym:nth-child(3){top:38%;right:3%;animation-delay:5s;font-size:30px}.sym:nth-child(4){bottom:22%;left:6%;animation-delay:7.5s;font-size:18px}.sym:nth-child(5){top:22%;right:10%;animation-delay:4s;font-size:24px}.sym:nth-child(6){bottom:38%;left:3%;animation-delay:9s;font-size:32px}
+  @keyframes sym-float{0%{opacity:0;transform:translateY(15px) rotate(-10deg) scale(.7)}15%{opacity:.22}85%{opacity:.22}100%{opacity:0;transform:translateY(-30px) rotate(10deg) scale(1.1)}}
+  #scene{position:relative;width:100%;height:100vh;display:flex;flex-direction:column;z-index:10}
+  .hud-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 18px 12px;border-bottom:1px solid rgba(255,215,0,.2);background:rgba(10,8,18,.64);backdrop-filter:blur(16px)}
+  .hud-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;text-shadow:0 0 10px rgba(255,215,0,.45)}
+  .hud-label span{color:rgba(255,165,0,.65)}
+  .timer{font-family:var(--mono);font-size:22px;color:var(--gold);text-shadow:0 0 18px rgba(255,215,0,.8);letter-spacing:3px}
+  .timer.urgent{color:#FF3B5C;text-shadow:0 0 22px rgba(255,59,92,1);animation:timer-urgent .5s steps(1) infinite}@keyframes timer-urgent{0%,100%{opacity:1}50%{opacity:.3}}
+  .pulse-dots{display:flex;gap:6px;align-items:center}.dot{width:7px;height:7px;border-radius:50%;animation:pulse-dot 1.5s ease-in-out infinite}.dot:nth-child(1){background:#FF3B5C;box-shadow:0 0 8px #FF3B5C}.dot:nth-child(2){background:#FFD700;box-shadow:0 0 8px #FFD700;animation-delay:.3s}.dot:nth-child(3){background:#FF3B5C;box-shadow:0 0 8px #FF3B5C;animation-delay:.6s}@keyframes pulse-dot{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+  .content-area{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
+  .cbt-panel{background:rgba(12,10,18,.9);backdrop-filter:blur(22px);border:1px solid rgba(255,215,0,.28);border-left:4px solid var(--gold);padding:24px 26px;max-width:440px;width:100%;display:none;animation:panel-in .4s cubic-bezier(.16,1,.3,1) forwards;box-shadow:0 0 36px rgba(255,165,0,.08),0 8px 36px rgba(0,0,0,.7)}
+  .cbt-panel.active{display:block}@keyframes panel-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .phase-tag{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;text-shadow:0 0 8px rgba(255,215,0,.45)}.phase-tag::after{content:'';flex:1;height:1px;background:rgba(255,215,0,.2)}
+  .cbt-title{font-size:23px;font-weight:700;color:#FFFFFF;line-height:1.2;margin-bottom:12px;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+  .cbt-text{font-size:15px;color:#F5E8C8;line-height:1.75;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+  .cbt-text em{color:var(--gold);font-style:normal;font-weight:600}
+  .craving-bar{padding:12px 18px;background:rgba(10,8,18,.84);backdrop-filter:blur(10px);border-top:1px solid rgba(255,215,0,.12)}
+  .craving-header{display:flex;justify-content:space-between;margin-bottom:7px}.craving-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase}.craving-value{font-family:var(--mono);font-size:11px;color:var(--gold);text-shadow:0 0 8px rgba(255,215,0,.45)}
+  .craving-track{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}.craving-fill{height:100%;border-radius:2px;transition:width 1.5s cubic-bezier(.4,0,.2,1),background 1s}
+  .controls{display:flex;gap:10px;padding:14px 18px;background:rgba(10,8,18,.92);border-top:1px solid rgba(255,215,0,.12)}
+  .btn-next{flex:1;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0500;border:none;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;box-shadow:0 0 18px rgba(255,215,0,.2)}
+  .btn-next:hover{box-shadow:0 0 32px rgba(255,215,0,.48);transform:translateY(-1px)}
+  .btn-exit{padding:14px 18px;background:transparent;color:rgba(255,200,100,.55);border:1px solid rgba(255,200,100,.2);font-family:var(--mono);font-size:10px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+  .btn-exit:hover{color:var(--gold);border-color:rgba(255,215,0,.5)}
+  .sound-btn{position:fixed;top:65px;right:14px;z-index:20;background:rgba(10,8,18,.85);border:1px solid rgba(255,215,0,.32);color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:6px 10px;cursor:pointer;transition:all .2s;text-shadow:0 0 8px rgba(255,215,0,.4)}
+  #completion{display:none;position:fixed;inset:0;background:rgba(5,2,10,.97);z-index:100;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;animation:fade-in .8s ease}#completion.show{display:flex}@keyframes fade-in{from{opacity:0}to{opacity:1}}
+  .completion-icon{font-size:56px;margin-bottom:20px;animation:icon-pop .5s cubic-bezier(.34,1.56,.64,1) .3s both}@keyframes icon-pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+  .completion-title{font-size:28px;font-weight:700;color:var(--safe);letter-spacing:1px;margin-bottom:12px;text-shadow:0 0 20px rgba(0,200,83,.5)}
+  .completion-text{font-size:15px;color:var(--text);opacity:.88;line-height:1.7;max-width:340px;margin-bottom:10px}
+  .completion-stat{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:0;text-transform:uppercase}
 </style>
 </head>
 <body>
-
-<div class="bg-photo"></div>
-<div class="spotlight spot1"></div>
-<div class="spotlight spot2"></div>
-<div class="spotlight spot3"></div>
-<div class="spotlight spot4"></div>
-<div class="read-overlay"></div>
-<div class="neon-top"></div>
-<div class="neon-bottom"></div>
-<div class="neon-left"></div>
-<div class="neon-right"></div>
-
-<div class="lights-row" id="lights-row"></div>
-
-<div class="particles" id="particles"></div>
-
-<div class="symbols">
-  <div class="sym red">♠</div>
-  <div class="sym gold">♥</div>
-  <div class="sym red">♦</div>
-  <div class="sym gold">♣</div>
-  <div class="sym white">7</div>
-  <div class="sym gold">★</div>
-</div>
-
+<div class="bg-photo"></div><div class="spotlight spot1"></div><div class="spotlight spot2"></div><div class="spotlight spot3"></div><div class="spotlight spot4"></div><div class="read-overlay"></div><div class="neon-top"></div><div class="neon-bottom"></div><div class="neon-left"></div><div class="neon-right"></div>
+<div class="lights-row" id="lights-row"></div><div class="particles" id="particles"></div>
+<div class="symbols"><div class="sym red">♠</div><div class="sym gold">♥</div><div class="sym red">♦</div><div class="sym gold">♣</div><div class="sym white">7</div><div class="sym gold">★</div></div>
 <button class="sound-btn" id="sound-btn" onclick="toggleSound()">♪ SOUND OFF</button>
-
 <div id="scene">
-  <div class="hud-top">
-    <div class="hud-label">● CUE EXPOSURE <span>/ CASINO</span></div>
-    <div class="pulse-dots">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    </div>
-    <div class="timer" id="timer">2:30</div>
-  </div>
-
+  <div class="hud-top"><div class="hud-label">● CUE EXPOSURE <span>/ GAMBLING</span></div><div class="pulse-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div class="timer" id="timer">2:30</div></div>
   <div class="content-area">
-
-    <div class="cbt-panel active" id="phase-1">
-      <div class="phase-tag">Phase 01 — Awareness</div>
-      <div class="cbt-title">You feel the pull.</div>
-      <div class="cbt-text">
-        The lights. The sounds. The feeling that <em>this time</em> could be different.<br><br>
-        Your brain is flooding with dopamine — not because you won, but just because you're <em>here</em>. This is the trigger. Not a signal to act.
-      </div>
-    </div>
-
-    <div class="cbt-panel" id="phase-2">
-      <div class="phase-tag">Phase 02 — Recognition</div>
-      <div class="cbt-title">Name the feeling.</div>
-      <div class="cbt-text">
-        Excitement. Anticipation. The "almost" feeling.<br><br>
-        These sensations are real — but <em>manufactured</em> by your brain's reward system. The casino is engineered to create exactly this response. You are seeing it for what it is.
-      </div>
-    </div>
-
-    <div class="cbt-panel" id="phase-3">
-      <div class="phase-tag">Phase 03 — Reframe</div>
-      <div class="cbt-title">The house always wins. Always.</div>
-      <div class="cbt-text">
-        Your mind says "just one more." It always does.<br><br>
-        The near-miss is <em>programmed</em>. The excitement is <em>engineered</em>. Every machine, every table — designed for you to lose over time. You know this truth.
-      </div>
-    </div>
-
-    <div class="cbt-panel" id="phase-4">
-      <div class="phase-tag">Phase 04 — Urge Surfing</div>
-      <div class="cbt-title">Ride the wave. Don't fight it.</div>
-      <div class="cbt-text">
-        The urge is peaking right now. That's normal.<br><br>
-        Cravings last <em>15–20 minutes</em> at most. Don't resist — just observe. Stay present. Breathe. The wave is already beginning to break.
-      </div>
-    </div>
-
-    <div class="cbt-panel" id="phase-5">
-      <div class="phase-tag">Phase 05 — Integration</div>
-      <div class="cbt-title">You stayed. You chose yourself.</div>
-      <div class="cbt-text">
-        You sat with the discomfort and didn't act on it.<br><br>
-        Each time you do this, the trigger loses power. Your brain is <em>literally rewiring</em> right now. The casino lost today — not because of luck. Because of <em>you</em>.
-      </div>
-    </div>
-
+    <div class="cbt-panel active" id="phase-1"><div class="phase-tag">Phase 01 — Awareness</div><div class="cbt-title">The pull is here.</div><div class="cbt-text">The lights, the noise, the rush of possibility.<br><br>Your brain is responding to <em>the cue</em>, not a promise. This feeling is a trigger — not a command to place a bet.</div></div>
+    <div class="cbt-panel" id="phase-2"><div class="phase-tag">Phase 02 — Recognition</div><div class="cbt-title">Name what is happening.</div><div class="cbt-text">Excitement. Anticipation. The urge to keep going.<br><br>These sensations can feel urgent, but they are a learned response. You are noticing the pattern instead of acting on it.</div></div>
+    <div class="cbt-panel" id="phase-3"><div class="phase-tag">Phase 03 — Reframe</div><div class="cbt-title">Near-misses are designed to pull you in.</div><div class="cbt-text">The game can make it feel like you were <em>almost</em> there.<br><br>That feeling is powerful — and it is part of how gambling keeps people engaged. You do not need to chase it.</div></div>
+    <div class="cbt-panel" id="phase-4"><div class="phase-tag">Phase 04 — Urge Surfing</div><div class="cbt-title">Ride the wave. Don't feed it.</div><div class="cbt-text">The urge may peak and drop on its own.<br><br>Breathe, stay present, and watch it rise and fall without betting. Urges pass faster when you do not act on them.</div></div>
+    <div class="cbt-panel" id="phase-5"><div class="phase-tag">Phase 05 — Integration</div><div class="cbt-title">You stayed with it.</div><div class="cbt-text">You noticed the cue and did not follow it.<br><br>Each time you pause here, you weaken the automatic loop. This is practice — and it matters.</div></div>
   </div>
-
-  <div class="craving-bar">
-    <div class="craving-header">
-      <div class="craving-label">Urge Intensity</div>
-      <div class="craving-value" id="craving-text">3 / 10</div>
-    </div>
-    <div class="craving-track">
-      <div class="craving-fill" id="craving-fill" style="width:30%;background:linear-gradient(90deg,#00C853,#F39C12);"></div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button class="btn-exit" onclick="exitScene()">EXIT</button>
-    <button class="btn-next" id="next-btn" onclick="nextPhase()">CONTINUE →</button>
-  </div>
+  <div class="craving-bar"><div class="craving-header"><div class="craving-label">Urge Intensity</div><div class="craving-value" id="craving-text">3 / 10</div></div><div class="craving-track"><div class="craving-fill" id="craving-fill" style="width:30%;background:linear-gradient(90deg,#00C853,#F39C12);"></div></div></div>
+  <div class="controls"><button class="btn-exit" onclick="exitScene()">EXIT</button><button class="btn-next" id="next-btn" onclick="nextPhase()">CONTINUE →</button></div>
 </div>
-
-<div id="completion">
-  <div class="completion-icon">🧠</div>
-  <div class="completion-title">Session Complete</div>
-  <div class="completion-text">You faced the trigger and chose differently. Your brain just built a new pathway. Every session makes the next one easier.</div>
-  <div class="completion-stat">Neural rewiring in progress</div>
-  <button class="btn-complete" onclick="exitScene()">BACK TO MENTOR</button>
-</div>
-
+<div id="completion"><div class="completion-icon">🧠</div><div class="completion-title">Session Complete</div><div class="completion-text">You faced the trigger and chose differently. Your brain just practiced a new response. Every repetition makes the next one easier.</div><div class="completion-stat">Session completed</div></div>
 <script>
-  // ── ЛАМПОЧКИ ГИРЛЯНДЫ ──
-  const row = document.getElementById('lights-row');
-  for (let i = 0; i < 28; i++) {
-    const b = document.createElement('div');
-    b.className = 'light-bulb';
-    b.style.animationDelay = (i * 0.07) + 's';
-    row.appendChild(b);
-  }
-
-  // ── ЧАСТИЦЫ ──
-  const pc = document.getElementById('particles');
-  for (let i = 0; i < 22; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.bottom = '0';
-    p.style.animationDuration = (6 + Math.random() * 10) + 's';
-    p.style.animationDelay = (Math.random() * 8) + 's';
-    p.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
-    const size = 2 + Math.random() * 4;
-    p.style.width = p.style.height = size + 'px';
-    const colors = ['#FFD700','#FFA500','#FF2244','#FFFFFF','#FFE066'];
-    p.style.background = colors[Math.floor(Math.random()*colors.length)];
-    p.style.boxShadow = `0 0 ${size*2}px currentColor`;
-    pc.appendChild(p);
-  }
-
-  // ── ЗВУК ──
-  let audioCtx = null, gainNode = null, soundOn = false;
-
-  function createSound() {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    gainNode = audioCtx.createGain();
-    gainNode.gain.value = 0.07;
-    gainNode.connect(audioCtx.destination);
-
-    // Гул зала
-    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate*3, audioCtx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
-    const ns = audioCtx.createBufferSource();
-    ns.buffer = buf; ns.loop = true;
-    const f = audioCtx.createBiquadFilter();
-    f.type='bandpass'; f.frequency.value=350; f.Q.value=0.4;
-    ns.connect(f); f.connect(gainNode); ns.start();
-
-    function coin() {
-      if (!soundOn) return;
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.frequency.value = 1000+Math.random()*1000;
-      g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.25);
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start(); o.stop(audioCtx.currentTime+0.25);
-      setTimeout(coin, 1000+Math.random()*3500);
-    }
-
-    function beep() {
-      if (!soundOn) return;
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type='square'; o.frequency.value=500+Math.random()*300;
-      g.gain.setValueAtTime(0.03, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.12);
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start(); o.stop(audioCtx.currentTime+0.12);
-      setTimeout(beep, 1500+Math.random()*4000);
-    }
-
-    setTimeout(coin, 300);
-    setTimeout(beep, 900);
-  }
-
-  function toggleSound() {
-    const btn = document.getElementById('sound-btn');
-    if (!soundOn) {
-      if (!audioCtx) createSound(); else audioCtx.resume();
-      gainNode.gain.value = 0.07;
-      soundOn = true;
-      btn.textContent = '♪ SOUND ON';
-      btn.style.color = '#FFD700';
-      btn.style.boxShadow = '0 0 12px rgba(255,215,0,0.4)';
-    } else {
-      gainNode.gain.value = 0;
-      soundOn = false;
-      btn.textContent = '♪ SOUND OFF';
-      btn.style.color = '';
-      btn.style.boxShadow = '';
-    }
-  }
-
-  // ── ФАЗЫ ──
-  const phases = [
-    {id:'phase-1',craving:30,text:'3 / 10',color:'linear-gradient(90deg,#00C853,#F39C12)'},
-    {id:'phase-2',craving:58,text:'5.8 / 10',color:'linear-gradient(90deg,#F39C12,#E67E22)'},
-    {id:'phase-3',craving:72,text:'7.2 / 10',color:'linear-gradient(90deg,#E67E22,#FF2244)'},
-    {id:'phase-4',craving:42,text:'4.2 / 10',color:'linear-gradient(90deg,#F39C12,#00C853)'},
-    {id:'phase-5',craving:12,text:'1.2 / 10',color:'linear-gradient(90deg,#00C853,#2ECC71)'},
-  ];
-  let current=0, totalSeconds=150;
-
-  function startTimer(){
-    setInterval(()=>{
-      totalSeconds--;
-      if(totalSeconds<=0){completeSession();return;}
-      const m=Math.floor(totalSeconds/60), s=totalSeconds%60;
-      const el=document.getElementById('timer');
-      el.textContent=`${m}:${s.toString().padStart(2,'0')}`;
-      if(totalSeconds<=30) el.classList.add('urgent');
-    },1000);
-  }
-
-  function nextPhase(){
-    document.getElementById(phases[current].id).classList.remove('active');
-    current++;
-    if(current>=phases.length){completeSession();return;}
-    const p=phases[current];
-    document.getElementById(p.id).classList.add('active');
-    document.getElementById('craving-fill').style.width=p.craving+'%';
-    document.getElementById('craving-fill').style.background=p.color;
-    document.getElementById('craving-text').textContent=p.text;
-    if(current===phases.length-1) document.getElementById('next-btn').textContent='COMPLETE ✓';
-  }
-
-  function completeSession(){ document.getElementById('completion').classList.add('show'); }
-  function exitScene(){ window.history.back(); }
-
+  const row=document.getElementById('lights-row'); for(let i=0;i<28;i++){const b=document.createElement('div');b.className='light-bulb';b.style.animationDelay=(i*.07)+'s';row.appendChild(b)}
+  const pc=document.getElementById('particles'); for(let i=0;i<22;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.bottom='0';p.style.animationDuration=(6+Math.random()*10)+'s';p.style.animationDelay=(Math.random()*8)+'s';p.style.setProperty('--drift',(Math.random()*80-40)+'px');const size=2+Math.random()*4;p.style.width=p.style.height=size+'px';const colors=['#FFD700','#FFA500','#FF3B5C','#FFFFFF','#FFE066'];p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.boxShadow=`0 0 ${size*2}px currentColor`;pc.appendChild(p)}
+  let audioCtx=null,gainNode=null,soundOn=false; function createSound(){audioCtx=new(window.AudioContext||window.webkitAudioContext)();gainNode=audioCtx.createGain();gainNode.gain.value=.05;gainNode.connect(audioCtx.destination);const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*3,audioCtx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const ns=audioCtx.createBufferSource();ns.buffer=buf;ns.loop=true;const f=audioCtx.createBiquadFilter();f.type='bandpass';f.frequency.value=280;f.Q.value=.35;ns.connect(f);f.connect(gainNode);ns.start();function coin(){if(!soundOn)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=900+Math.random()*800;g.gain.setValueAtTime(.08,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.22);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.22);setTimeout(coin,1100+Math.random()*3200)}function beep(){if(!soundOn)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='square';o.frequency.value=520+Math.random()*260;g.gain.setValueAtTime(.025,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.12);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.12);setTimeout(beep,1600+Math.random()*4000)}setTimeout(coin,300);setTimeout(beep,900)}
+  function toggleSound(){const btn=document.getElementById('sound-btn');if(!soundOn){if(!audioCtx)createSound();else audioCtx.resume();gainNode.gain.value=.05;soundOn=true;btn.textContent='♪ SOUND ON'}else{gainNode.gain.value=0;soundOn=false;btn.textContent='♪ SOUND OFF'}}
+  const phases=[{id:'phase-1',craving:28,text:'2.8 / 10',color:'linear-gradient(90deg,#00C853,#F39C12)'},{id:'phase-2',craving:54,text:'5.4 / 10',color:'linear-gradient(90deg,#F39C12,#E67E22)'},{id:'phase-3',craving:70,text:'7 / 10',color:'linear-gradient(90deg,#E67E22,#FF3B5C)'},{id:'phase-4',craving:41,text:'4.1 / 10',color:'linear-gradient(90deg,#F39C12,#00C853)'},{id:'phase-5',craving:10,text:'1 / 10',color:'linear-gradient(90deg,#00C853,#2ECC71)'}]; let current=0,totalSeconds=150;
+  function startTimer(){setInterval(()=>{totalSeconds--;if(totalSeconds<=0){completeSession();return}const m=Math.floor(totalSeconds/60),s=totalSeconds%60;const el=document.getElementById('timer');el.textContent=`${m}:${s.toString().padStart(2,'0')}`;if(totalSeconds<=30)el.classList.add('urgent')},1000)}
+  function nextPhase(){document.getElementById(phases[current].id).classList.remove('active');current++;if(current>=phases.length){completeSession();return}const p=phases[current];document.getElementById(p.id).classList.add('active');document.getElementById('craving-fill').style.width=p.craving+'%';document.getElementById('craving-fill').style.background=p.color;document.getElementById('craving-text').textContent=p.text;if(current===phases.length-1)document.getElementById('next-btn').textContent='COMPLETE ✓'}
+  function completeSession(){document.getElementById('completion').classList.add('show')}
+  function exitScene(){window.history.back()}
   startTimer();
 </script>
 </body>
