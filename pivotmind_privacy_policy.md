@@ -1,159 +1,119 @@
-# Privacy Policy — PivotMind
+PivotMind
+← Back
+Legal Document
+Privacy Policy
+How we collect, use, and protect your personal information
 
-**Last updated: June 9, 2026**
+Last updated: June 9, 2026
+🔒
+Your data is safe
+Encrypted and stored on AWS servers
 
----
+🚫
+Never sold
+We never sell your data to third parties
 
-## 1. Who We Are
+🗑️
+Delete anytime
+Request full deletion within 30 days
 
-PivotMind ("we", "us", "our") is a recovery support application designed to help individuals dealing with alcohol and gambling dependency. PivotMind is not a medical provider, clinical service, or licensed healthcare platform. We provide wellness and emotional support tools only.
+🤖
+AI powered
+Messages processed by OpenAI API
 
-**Contact:** privacy@pivotmind.app
+1
+Who We Are
+PivotMind ("we", "us", "our") is a recovery support application designed to help individuals dealing with alcohol and gambling dependency.
 
----
+PivotMind is not a medical provider, clinical service, or licensed healthcare platform. We provide wellness and emotional support tools only.
 
-## 2. What Data We Collect
+Contact: privacy@pivotmind.app
 
-When you use PivotMind, we collect the following information:
+2
+What Data We Collect
+Account data:
 
-**Account data:**
-- Full name
-- Email address
-- Password (encrypted, never stored in plain text)
-- Google account information (if you sign in with Google)
+Full name and email address
+Password (encrypted, never stored in plain text)
+Google account info (if you sign in with Google)
+Usage data:
 
-**Usage data:**
-- Addiction type (alcohol or gambling)
-- Daily spend amount (optional, entered by you)
-- Sobriety streak and sober days counter
-- Journal entries and mood logs
-- AI Mentor conversation history
-- AR session logs (completion, urge levels)
-- Points, level, and achievement data
-- Avatar selection
+Addiction type (alcohol or gambling)
+Daily spend amount (optional, entered by you)
+Sobriety streak and sober days counter
+Journal entries and mood logs
+AI Mentor conversations
+AR session logs (completion, urge levels)
+Points, level and achievement data
+3
+How We Use Your Data
+We use your data exclusively to provide and improve the PivotMind experience, personalize your AI Mentor conversations, and track your recovery progress.
 
-**Technical data:**
-- Device type and browser
-- IP address (collected automatically by our hosting provider)
-- App usage timestamps
+We never:
 
----
-
-## 3. How We Use Your Data
-
-We use your data exclusively to:
-
-- Provide and improve the PivotMind experience
-- Personalize your AI Mentor conversations
-- Track your recovery progress and display it to you
-- Send transactional emails (account confirmation, password reset)
-- Notify you about platform updates (only if you opt in)
-
-**We never:**
-- Sell your data to third parties
-- Use your data for advertising purposes
-- Share your personal information with employers, insurers, or healthcare providers
-- Use your data to train AI models without your explicit consent
-
----
-
-## 4. AI Mentor and OpenAI
-
+Sell your data to third parties
+Use your data for advertising purposes
+Share your information with employers, insurers, or healthcare providers
+Use your data to train AI models without your explicit consent
+4
+AI Mentor & OpenAI
 PivotMind's AI Mentor is powered by OpenAI's API. When you send messages to the AI Mentor, those messages are transmitted to OpenAI for processing.
 
-**What this means for you:**
-- Your conversation content is sent to OpenAI's servers to generate responses
-- OpenAI's data retention and privacy policies apply to this processing
-- We do not send your name or email to OpenAI — only your message content and addiction type context
-- You can review OpenAI's privacy policy at: openai.com/privacy
+⚠️ We do not send your name or email to OpenAI — only your message content and addiction type context. We recommend not sharing highly sensitive personal details (financial info, full name, location) in AI Mentor conversations.
 
-We recommend not sharing highly sensitive personal information (financial details, full name, location) in AI Mentor conversations.
+You can review OpenAI's privacy policy at: openai.com/privacy
 
----
+5
+Data Storage & Security
+Your data is stored on servers provided by Bubble.io, hosted on Amazon Web Services (AWS). AWS provides encryption of data at rest and in transit (TLS/SSL) and industry-standard security protocols.
 
-## 5. Data Storage and Security
+While we take reasonable measures to protect your data, no digital system is 100% secure. We will notify you promptly in the event of a data breach.
 
-Your data is stored on servers provided by Bubble.io, hosted on Amazon Web Services (AWS). AWS provides:
+6
+Your Rights (GDPR)
+If you are located in the European Union or EEA, you have the following rights:
 
-- Encryption of data at rest and in transit (TLS/SSL)
-- Industry-standard security protocols
-- Regular security audits
+ACCESS
+Request a copy of all personal data we hold about you
 
-While we take reasonable measures to protect your data, no digital system is 100% secure. We will notify you promptly in the event of a data breach that affects your personal information.
+CORRECT
+Ask us to correct any inaccurate data
 
----
+DELETE
+Request deletion of all your personal data within 30 days
 
-## 6. Your Rights (GDPR)
+PORTABILITY
+Receive your data in a machine-readable format
 
-If you are located in the European Union or European Economic Area, you have the following rights under GDPR:
+OBJECT
+Object to how we process your data at any time
 
-**Right to access** — You can request a copy of all personal data we hold about you.
+WITHDRAW
+Withdraw consent at any time without penalty
 
-**Right to rectification** — You can ask us to correct inaccurate data.
-
-**Right to erasure ("right to be forgotten")** — You can request that we delete all your personal data. We will process this request within 30 days.
-
-**Right to data portability** — You can request your data in a machine-readable format.
-
-**Right to object** — You can object to how we process your data.
-
-**Right to withdraw consent** — You can withdraw consent at any time.
-
-To exercise any of these rights, contact us at: **privacy@pivotmind.app**
-
----
-
-## 7. Data Retention
-
+7
+Data Retention
 We retain your personal data for as long as your account is active. If you delete your account:
 
-- Your personal data is deleted within 30 days
-- Anonymized, non-identifiable usage statistics may be retained for platform improvement
-- Backup copies are fully deleted within 90 days
+Personal data deleted within 30 days
+Anonymized usage statistics may be retained for platform improvement
+Backup copies fully deleted within 90 days
+8
+Third-Party Services
+Service	Purpose	Privacy Policy
+Bubble.io	App hosting & database	bubble.io/privacy
+OpenAI	AI Mentor responses	openai.com/privacy
+Google OAuth	Optional sign-in	Google Privacy
+SendGrid	Transactional emails	sendgrid.com/privacy
+Tally.so	Waitlist form	tally.so/privacy
+9
+Children's Privacy
+PivotMind is not intended for users under the age of 18. We do not knowingly collect personal data from minors. If you believe a minor has created an account, contact us immediately at privacy@pivotmind.app and we will delete the account.
 
----
+Questions or requests?
+We aim to respond to all privacy requests within 5 business days
 
-## 8. Cookies
+privacy@pivotmind.app
+Important: PivotMind is a wellness support platform. It is not a substitute for professional medical advice, diagnosis, or treatment. If you are experiencing a mental health crisis, please contact a qualified healthcare professional or crisis helpline immediately.
 
-PivotMind uses minimal cookies necessary for the application to function (session management, authentication). We do not use advertising or tracking cookies.
-
----
-
-## 9. Third-Party Services
-
-PivotMind uses the following third-party services that may process your data:
-
-| Service | Purpose | Privacy Policy |
-|---------|---------|----------------|
-| Bubble.io | App hosting and database | bubble.io/privacy |
-| OpenAI | AI Mentor responses | openai.com/privacy |
-| Google OAuth | Optional sign-in | policies.google.com/privacy |
-| SendGrid | Transactional emails | sendgrid.com/privacy |
-| Tally.so | Waitlist form | tally.so/privacy |
-
----
-
-## 10. Children's Privacy
-
-PivotMind is not intended for users under the age of 18. We do not knowingly collect personal data from minors. If you believe a minor has created an account, please contact us at privacy@pivotmind.app and we will delete the account immediately.
-
----
-
-## 11. Changes to This Policy
-
-We may update this Privacy Policy from time to time. When we make significant changes, we will notify you by email or through a notice in the app. Your continued use of PivotMind after changes constitutes acceptance of the updated policy.
-
----
-
-## 12. Contact Us
-
-For any privacy-related questions, requests, or concerns:
-
-**Email:** privacy@pivotmind.app
-**Website:** pivotmind.app
-
-We aim to respond to all privacy requests within 5 business days.
-
----
-
-*PivotMind is a wellness support platform. It is not a substitute for professional medical advice, diagnosis, or treatment. If you are experiencing a mental health crisis, please contact a qualified healthcare professional or crisis helpline immediately.*
+© 2026 PivotMind. All rights reserved. · privacy@pivotmind.app
