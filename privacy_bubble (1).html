@@ -1,0 +1,643 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --mint: #E8F5EE;
+    --mint-dark: #C8E6D4;
+    --green: #2ECC71;
+    --green-dark: #27AE60;
+    --blue: #2C3E8C;
+    --blue-light: #3D52B0;
+    --text: #1A2340;
+    --text-muted: #5A6A7A;
+    --white: #FFFFFF;
+    --border: rgba(44,62,140,0.12);
+  }
+
+  body {
+    background: var(--mint);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--blue);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.5px;
+  }
+
+  .logo span {
+    color: var(--green);
+  }
+
+  .back-btn {
+    background: rgba(255,255,255,0.12);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .back-btn:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+    padding: 48px 24px 40px;
+    text-align: center;
+    color: var(--white);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(46,204,113,0.2);
+    border: 1px solid rgba(46,204,113,0.4);
+    color: #7FFFB4;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .hero p {
+    font-size: 14px;
+    opacity: 0.75;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .hero-date {
+    margin-top: 16px;
+    font-size: 12px;
+    opacity: 0.55;
+    font-family: monospace;
+    letter-spacing: 1px;
+  }
+
+  /* CONTENT */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* SUMMARY CARDS */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+
+  .summary-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .summary-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .icon-green { background: rgba(46,204,113,0.12); }
+  .icon-blue { background: rgba(44,62,140,0.1); }
+  .icon-red { background: rgba(231,76,60,0.1); }
+  .icon-yellow { background: rgba(241,196,15,0.12); }
+
+  .summary-card h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .summary-card p {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* SECTIONS */
+  .section {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 12px rgba(44,62,140,0.05);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-number {
+    width: 32px;
+    height: 32px;
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+
+  .section p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 12px;
+  }
+
+  .section p:last-child { margin-bottom: 0; }
+
+  /* DATA LIST */
+  .data-list {
+    list-style: none;
+    margin: 12px 0;
+  }
+
+  .data-list li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 8px 0 8px 24px;
+    position: relative;
+    border-bottom: 1px solid rgba(44,62,140,0.06);
+    line-height: 1.5;
+  }
+
+  .data-list li:last-child { border-bottom: none; }
+
+  .data-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--green-dark);
+    font-weight: 600;
+  }
+
+  .data-list li strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* NEVER LIST */
+  .never-list {
+    list-style: none;
+    margin: 12px 0;
+  }
+
+  .never-list li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 8px 0 8px 28px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .never-list li::before {
+    content: '✗';
+    position: absolute;
+    left: 0;
+    color: #E74C3C;
+    font-weight: 700;
+  }
+
+  /* RIGHTS GRID */
+  .rights-grid {
+    display: grid;
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  .right-item {
+    background: var(--mint);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .right-badge {
+    background: var(--blue);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .right-item p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* THIRD PARTY TABLE */
+  .services-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+
+  .services-table th {
+    background: var(--mint);
+    color: var(--blue);
+    font-weight: 600;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .services-table td {
+    padding: 10px 12px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .services-table tr:last-child td { border-bottom: none; }
+
+  .services-table a {
+    color: var(--blue-light);
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  /* OPENAI BOX */
+  .openai-box {
+    background: linear-gradient(135deg, rgba(44,62,140,0.06), rgba(44,62,140,0.03));
+    border: 1px solid rgba(44,62,140,0.15);
+    border-left: 4px solid var(--blue);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+  }
+
+  .openai-box p {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  /* CONTACT BOX */
+  .contact-box {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    color: var(--white);
+    margin-top: 24px;
+  }
+
+  .contact-box h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .contact-box p {
+    font-size: 13px;
+    opacity: 0.75;
+    margin-bottom: 16px;
+    color: var(--white);
+  }
+
+  .contact-email {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+  }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: rgba(231,76,60,0.06);
+    border: 1px solid rgba(231,76,60,0.15);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-top: 16px;
+  }
+
+  .disclaimer p {
+    font-size: 13px;
+    color: #A04040;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .disclaimer strong {
+    color: #8B2020;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--blue);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .footer span { color: var(--green); }
+
+  @media (max-width: 480px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+    .section { padding: 20px 16px; }
+  }
+</style>
+<!-- HEADER -->
+<div class="header">
+<div class="logo">Pivot<span>Mind</span></div>
+<a class="back-btn" href="javascript:history.back()">← Back</a>
+</div>
+<!-- HERO -->
+<div class="hero">
+<div class="hero-badge">Legal Document</div>
+<h1>Privacy Policy</h1>
+<p>How we collect, use, and protect your personal information</p>
+<div class="hero-date">Last updated: June 9, 2026</div>
+</div>
+<div class="container">
+<!-- SUMMARY CARDS -->
+<div class="summary-grid">
+<div class="summary-card">
+<div class="summary-icon icon-green">🔒</div>
+<div>
+<h4>Your data is safe</h4>
+<p>Encrypted and stored on AWS servers</p>
+</div>
+</div>
+<div class="summary-card">
+<div class="summary-icon icon-red">🚫</div>
+<div>
+<h4>Never sold</h4>
+<p>We never sell your data to third parties</p>
+</div>
+</div>
+<div class="summary-card">
+<div class="summary-icon icon-blue">🗑️</div>
+<div>
+<h4>Delete anytime</h4>
+<p>Request full deletion within 30 days</p>
+</div>
+</div>
+<div class="summary-card">
+<div class="summary-icon icon-yellow">🤖</div>
+<div>
+<h4>AI powered</h4>
+<p>Messages processed by OpenAI API</p>
+</div>
+</div>
+</div>
+<!-- SECTION 1 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">1</div>
+<h2>Who We Are</h2>
+</div>
+<p>PivotMind ("we", "us", "our") is a recovery support application designed to help individuals dealing with alcohol and gambling dependency.</p>
+<p>PivotMind is <strong>not a medical provider, clinical service, or licensed healthcare platform.</strong> We provide wellness and emotional support tools only.</p>
+<p>Contact: <strong>privacy@pivotmind.app</strong></p>
+</div>
+<!-- SECTION 2 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">2</div>
+<h2>What Data We Collect</h2>
+</div>
+<p><strong>Account data:</strong></p>
+<ul class="data-list">
+<li><strong>Full name</strong> and email address</li>
+<li><strong>Password</strong> (encrypted, never stored in plain text)</li>
+<li><strong>Google account info</strong> (if you sign in with Google)</li>
+</ul>
+<p><strong>Usage data:</strong></p>
+<ul class="data-list">
+<li><strong>Addiction type</strong> (alcohol or gambling)</li>
+<li><strong>Daily spend amount</strong> (optional, entered by you)</li>
+<li><strong>Sobriety streak</strong> and sober days counter</li>
+<li><strong>Journal entries</strong> and mood logs</li>
+<li><strong>AI Mentor conversations</strong></li>
+<li><strong>AR session logs</strong> (completion, urge levels)</li>
+<li><strong>Points, level</strong> and achievement data</li>
+</ul>
+</div>
+<!-- SECTION 3 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">3</div>
+<h2>How We Use Your Data</h2>
+</div>
+<p>We use your data exclusively to provide and improve the PivotMind experience, personalize your AI Mentor conversations, and track your recovery progress.</p>
+<p><strong>We never:</strong></p>
+<ul class="never-list">
+<li>Sell your data to third parties</li>
+<li>Use your data for advertising purposes</li>
+<li>Share your information with employers, insurers, or healthcare providers</li>
+<li>Use your data to train AI models without your explicit consent</li>
+</ul>
+</div>
+<!-- SECTION 4 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">4</div>
+<h2>AI Mentor &amp; OpenAI</h2>
+</div>
+<p>PivotMind's AI Mentor is powered by OpenAI's API. When you send messages to the AI Mentor, those messages are transmitted to OpenAI for processing.</p>
+<div class="openai-box">
+<p>⚠️ We do not send your name or email to OpenAI — only your message content and addiction type context. We recommend not sharing highly sensitive personal details (financial info, full name, location) in AI Mentor conversations.</p>
+</div>
+<p>You can review OpenAI's privacy policy at: <strong>openai.com/privacy</strong></p>
+</div>
+<!-- SECTION 5 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">5</div>
+<h2>Data Storage &amp; Security</h2>
+</div>
+<p>Your data is stored on servers provided by Bubble.io, hosted on <strong>Amazon Web Services (AWS)</strong>. AWS provides encryption of data at rest and in transit (TLS/SSL) and industry-standard security protocols.</p>
+<p>While we take reasonable measures to protect your data, no digital system is 100% secure. We will notify you promptly in the event of a data breach.</p>
+</div>
+<!-- SECTION 6 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">6</div>
+<h2>Your Rights (GDPR)</h2>
+</div>
+<p>If you are located in the European Union or EEA, you have the following rights:</p>
+<div class="rights-grid">
+<div class="right-item">
+<div class="right-badge">ACCESS</div>
+<p>Request a copy of all personal data we hold about you</p>
+</div>
+<div class="right-item">
+<div class="right-badge">CORRECT</div>
+<p>Ask us to correct any inaccurate data</p>
+</div>
+<div class="right-item">
+<div class="right-badge">DELETE</div>
+<p>Request deletion of all your personal data within 30 days</p>
+</div>
+<div class="right-item">
+<div class="right-badge">PORTABILITY</div>
+<p>Receive your data in a machine-readable format</p>
+</div>
+<div class="right-item">
+<div class="right-badge">OBJECT</div>
+<p>Object to how we process your data at any time</p>
+</div>
+<div class="right-item">
+<div class="right-badge">WITHDRAW</div>
+<p>Withdraw consent at any time without penalty</p>
+</div>
+</div>
+</div>
+<!-- SECTION 7 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">7</div>
+<h2>Data Retention</h2>
+</div>
+<p>We retain your personal data for as long as your account is active. If you delete your account:</p>
+<ul class="data-list">
+<li>Personal data deleted within <strong>30 days</strong></li>
+<li>Anonymized usage statistics may be retained for platform improvement</li>
+<li>Backup copies fully deleted within <strong>90 days</strong></li>
+</ul>
+</div>
+<!-- SECTION 8 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">8</div>
+<h2>Third-Party Services</h2>
+</div>
+<table class="services-table">
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+<th>Privacy Policy</th>
+</tr>
+<tr>
+<td><strong>Bubble.io</strong></td>
+<td>App hosting &amp; database</td>
+<td><a href="https://bubble.io/privacy" target="_blank">bubble.io/privacy</a></td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td>AI Mentor responses</td>
+<td><a href="https://openai.com/privacy" target="_blank">openai.com/privacy</a></td>
+</tr>
+<tr>
+<td><strong>Google OAuth</strong></td>
+<td>Optional sign-in</td>
+<td><a href="https://policies.google.com/privacy" target="_blank">Google Privacy</a></td>
+</tr>
+<tr>
+<td><strong>SendGrid</strong></td>
+<td>Transactional emails</td>
+<td><a href="https://sendgrid.com/privacy" target="_blank">sendgrid.com/privacy</a></td>
+</tr>
+<tr>
+<td><strong>Tally.so</strong></td>
+<td>Waitlist form</td>
+<td><a href="https://tally.so/privacy" target="_blank">tally.so/privacy</a></td>
+</tr>
+</table>
+</div>
+<!-- SECTION 9 -->
+<div class="section">
+<div class="section-header">
+<div class="section-number">9</div>
+<h2>Children's Privacy</h2>
+</div>
+<p>PivotMind is not intended for users under the age of <strong>18</strong>. We do not knowingly collect personal data from minors. If you believe a minor has created an account, contact us immediately at <strong>privacy@pivotmind.app</strong> and we will delete the account.</p>
+</div>
+<!-- CONTACT -->
+<div class="contact-box">
+<h3>Questions or requests?</h3>
+<p>We aim to respond to all privacy requests within 5 business days</p>
+<a class="contact-email" href="mailto:privacy@pivotmind.app">privacy@pivotmind.app</a>
+</div>
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+<p><strong>Important:</strong> PivotMind is a wellness support platform. It is not a substitute for professional medical advice, diagnosis, or treatment. If you are experiencing a mental health crisis, please contact a qualified healthcare professional or crisis helpline immediately.</p>
+</div>
+</div>
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 <span>PivotMind</span>. All rights reserved. · privacy@pivotmind.app
+</div>
