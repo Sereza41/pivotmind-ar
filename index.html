@@ -8,7 +8,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
   :root{--gold:#FFD700;--gold2:#FFA500;--red:#FF3B5C;--text:#FFF8E7;--muted:#A58B6A;--safe:#00C853;--mono:'Share Tech Mono',monospace;--sans:'Rajdhani',sans-serif}
-  body{background:#0d0814;color:var(--text);font-family:var(--sans);height:100vh;overflow:hidden;position:relative}
+  body{background:#0d0814;color:var(--text);font-family:var(--sans);height:100dvh;overflow:hidden;position:relative}
   .bg-photo{position:fixed;inset:0;background-image:url('https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=1600&q=90');background-size:cover;background-position:center;filter:brightness(.52) saturate(1.02) contrast(1.05);z-index:0;animation:slow-drift 30s ease-in-out infinite alternate}
   @keyframes slow-drift{from{transform:scale(1)}to{transform:scale(1.04) translateX(-1%)}}
   .spotlight{position:fixed;z-index:1;pointer-events:none;border-radius:50%;mix-blend-mode:screen;animation:spot-move ease-in-out infinite alternate}
@@ -38,7 +38,7 @@
   .sym.red{color:#FF5775}.sym.gold{color:#FFD700}.sym.white{color:#FFFFFF}
   .sym:nth-child(1){top:12%;left:4%;animation-delay:0s;font-size:28px}.sym:nth-child(2){top:68%;right:5%;animation-delay:2.5s;font-size:22px}.sym:nth-child(3){top:38%;right:3%;animation-delay:5s;font-size:30px}.sym:nth-child(4){bottom:22%;left:6%;animation-delay:7.5s;font-size:18px}.sym:nth-child(5){top:22%;right:10%;animation-delay:4s;font-size:24px}.sym:nth-child(6){bottom:38%;left:3%;animation-delay:9s;font-size:32px}
   @keyframes sym-float{0%{opacity:0;transform:translateY(15px) rotate(-10deg) scale(.7)}15%{opacity:.22}85%{opacity:.22}100%{opacity:0;transform:translateY(-30px) rotate(10deg) scale(1.1)}}
-  #scene{position:relative;width:100%;height:100vh;display:flex;flex-direction:column;z-index:10}
+  #scene{position:relative;width:100%;height:100dvh;display:flex;flex-direction:column;z-index:10}
   .hud-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 18px 12px;border-bottom:1px solid rgba(255,215,0,.2);background:rgba(10,8,18,.64);backdrop-filter:blur(16px)}
   .hud-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;text-shadow:0 0 10px rgba(255,215,0,.45)}
   .hud-label span{color:rgba(255,165,0,.65)}
